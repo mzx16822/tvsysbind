@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>框架测试项目</title>
+ 
+<meta name="Author" content="minzhixiong_gz">
+ <meta name="page-view-size" content="1920*1080">
+ 
+<style type="text/css"
+>
+body,dl,dd,ul,ol,h1,h2,h3,h4,h5,h6,pre,form,input,textarea,p,hr,thead,tbody,tfoot,th,td{margin:0;padding:0;}
+ul,ol{list-style:none;}
+a{text-decoration:none;}
+html{-ms-text-size-adjust:none;-webkit-text-size-adjust:none;text-size-adjust:none;}
+body{line-height:1.5;}
+body,button,input,select,textarea{font-family:'helvetica neue',tahoma,'hiragino sans gb',stheiti,'wenquanyi micro hei',\5FAE\8F6F\96C5\9ED1,\5B8B\4F53,sans-serif;}
+b,strong{font-weight:bold;}
+i,em{font-style:normal;}
+table{border-collapse:collapse;border-spacing:0;}
+table th,table td{border:1px solid #ddd;padding:5px;}
+table th{font-weight:inherit;border-bottom-width:2px;border-bottom-color:#ccc;}
+img{border:0 none;width:auto\9;max-width:100%;vertical-align:top;}
+button,input,select,textarea{font-family:inherit;font-size:100%;margin:0;vertical-align:baseline;}
+button,html input[type="button"],input[type="reset"],input[type="submit"]{-webkit-appearance:button;cursor:pointer;}
+button[disabled],input[disabled]{cursor:default;}
+input[type="checkbox"],input[type="radio"]{box-sizing:border-box;padding:0;}
+input[type="search"]{-webkit-appearance:textfield;-moz-box-sizing:content-box;-webkit-box-sizing:content-box;box-sizing:content-box;}
+input[type="search"]::-webkit-search-decoration{-webkit-appearance:none;}
+@media screen and (-webkit-min-device-pixel-ratio:0){input{line-height:normal!important;}}
+select[size],select[multiple],select[size][multiple]{border:1px solid #AAA;padding:0;}
+article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,summary{display:block;}
+audio,canvas,video,progress{display:inline-block;}
+body{font-size: .14rem;background: #000739;}
+.inner{ width: 1400px; margin: 0 auto; margin: 0 auto; }
+.nav{margin: 10px auto;height: 150px;text-align: center;}
+.nav a{width: 300px;height: 120px;line-height: 120px;display: inline-block;font-size: 40px;text-align: center;background: #0014a9;color: #FFF;margin-right: 10px;border-radius: 10px;;}
+
+.main{width: 1530px;margin: .5rem auto;display: table;}
+.list a{width: 500px;height: 280px;float: left;margin-bottom: 10px;margin-right: 10px;border-radius: 10px;overflow: hidden;}
+.current{-moz-box-shadow:0px 0px 10px #00B5AF;-webkit-box-shadow:0px 0px 10px #00B5AF;box-shadow: 0px 0px 28px #f2ff23;
+-webkit-gradient(linear, left top, left bottom, from(#6cc3fe), to(#21a1d0));
+    -webkit-animation-timing-function: ease-in-out;
+    -webkit-animation-name: breathe;
+    -webkit-animation-duration: 1500ms;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-direction: alternate;
+}
+.code{width: 1200px;color: #000;font-size: 14px;background: #fcfcfc;margin: 0 auto;padding:.5rem 1.2rem ;}
+@-webkit-keyframes breathe {
+    0% { opacity: .2; box-shadow:0 1px 2px rgba(255,255,255,0.1); }
+    100% { opacity: 1;   box-shadow:0 1px 30px rgba(59,255,255,1);}
+}
+.xr560{height: 560px;}
+.listbox{ padding-top: 10px; clear: both; }
+.listbox .box{width: 500px;/* height: 560px; */float: left;margin-bottom: 10px;margin-right: 10px;border-radius: 10px;overflow: hidden;}
+.current:focus{ opacity: 0; }
+.code em{color: #999; display: block;}
+::-webkit-selection,::-moz-selection,::selection,:focus{
+ background:#FF9; 
+color:#F00;
+}
+
+::selection {
+background:#FF9; 
+color:#F00;
+
+ border: #000 1px solid;
+}
+::-moz-selection {
+background:#FF9; 
+color:#F00;
+
+ border: #000 1px solid;
+}
+::-webkit-selection {
+background:#FF9; 
+color:#F00;
+
+ border: #000 1px solid;
+}
+a,button,input{ 
+
+
+
+ /*  -webkit-user-modify: read-write-plaintext-only;*/
+
+}
+</style> 
+ 
+</head>
+<body>
+<div class="doc" id="Jdoc">
+    <span id="Jtest" style="color:#FFF;font-size:1rem;"></span>
+    <div class="header">
+            <div class="inner">
+                <div class="nav">
+                    <a href="#1" class="hotbutton" id="iptv_1" data-id="1001" data-dow="4">主页</a>
+                    <a href="#2" class="hotbutton" id="iptv_2" data-id="1002" data-dow="3">游戏</a>
+                    <a href="#3" class="hotbutton" id="iptv_3" data-id="1003" data-dow="2">生活</a>
+                    <a href="#4" class="hotbutton" id="iptv_4" data-id="1004" data-dow="1" >新闻</a>
+                     
+                </div>
+            </div>
+    </div>
+    <div class="main">
+        <div class="list">
+                <ul data-num="3"> <!-- 设定每行个数 -->
+                    <a href="#" class="hotbutton" id="iptv_5" data-id="1005">
+                        <img src="http://temp.im/500x280/9400e0/fff" /></a>
+                    <a href="#" class="hotbutton" id="iptv_6" data-id="1006">
+                        <img src="http://temp.im/500x280/9400e0/fff" ></a>
+                    <a href="#" class="hotbutton" id="iptv_7" data-id="1007">
+                        <img src="http://temp.im/500x280/9400e0/fff" /></a>
+                    <a href="#" class="hotbutton" id="iptv_8" data-id="1008">
+                        <img src="http://temp.im/500x280/9400e0/fff" /></a>
+                    <a href="#" class="hotbutton" id="iptv_9" data-id="1009">
+                        <img src="http://temp.im/500x280/9400e0/fff" /></a>
+                    <a href="#" class="hotbutton" id="iptv_10" data-id="1010">
+                        <img src="http://temp.im/500x280/9400e0/fff" /></a>
+
+                </ul>
+        </div>
+
+        <div class="listbox" data-num="3">
+                 
+                    <div class="hotbutton box xr560" id="iptv_11" data-id="1005" data-dow="9" >
+                        <img src="http://temp.im/500x560/9400e0/fff" /></div>
+                    <div class="hotbutton box" id="iptv_12" data-id="1006" data-dow="2">
+                        <img src="http://temp.im/500x280/9400e0/fff" ></div>
+                    <div class="hotbutton box" id="iptv_13" data-id="1007" data-dow="2" >
+                        <img src="http://temp.im/500x280/9400e0/fff" /></div>
+                    <div class="hotbutton box" id="iptv_14" data-id="1008" data-dow="2" data-up="2" data-left="3">
+                        <img src="http://temp.im/500x280/9400e0/fff" /></div>
+                    <div class="hotbutton box" id="iptv_15" data-id="1009" data-up="2">
+                        <img src="http://temp.im/500x280/9400e0/fff" /></div>
+                     
+ 
+        </div>
+ 
+    </div>
+
+</div>  
+ <div class="code">
+<h1>tvSysBtnBind 插件说明</h1>
+<p>id 内容所在的id值</p>
+<p>      currentIndex 默认的索引</p>
+<p>      btnLeft 键值</p>
+<p>      btnUp 键值</p>
+<p>      btnRight 键值</p>
+<p>      btnDown 键值</p>
+<p>      btnEnter 键值</p>
+<p>      className  绑定热键名</p>
+ <p>     currentClass 设置的样式名</p>
+ <p> keyRemoveDefault 移除默认事件</p>
+ <h1>方向设置</h1>
+  <p>data-top="9" </p>
+  <p>data-left="9" </p>
+  <p>data-dow="9" </p>
+  <p>data-right="9" </p> 
+    <p>数字代表跳的相隔值</p> 
+
+ <br/>
+ <p>rules:{</p>
+ <p>       0:[0,0,3,1],</p>
+ <p>       1:[0,-1,2,1],</p>
+ <p>       2:[0,-1,2,0],</p>
+ <p>       3:[-3,0,3,1],</p>
+ <p>       4:[-2,-1,1,0],</p>
+ <p>       5:[-1,-2,4,0],</p>
+ <p>       6:[-3,0,5,1],</p>
+ <p>       7:[-4,-1,1,2],</p>
+ <p>       8:[-1,-2,3,2],</p>
+ <p>       9:[-4,-2,1,0],</p>
+ <p>       10:[-1,-2,2,0],</p>
+ <p>       11:[-5,0,2,1],</p>
+ <p>       12:[-2,-1,3,0],</p>
+  <p>      13:[-2,0,3,1],</p>
+  <p>      14:[-3,-1,2,1],</p>
+   <p>     15:[-3,-1,2,0],</p>
+   <p>     16:[-3,0,0,1],</p>
+  <p>      17:[-2,-1,0,0],</p>
+ <p>   }</p>
+ 
+<p>/*</p>v
+<p>1 ，可以指定按键触发后方向 data-dow="3" 表示当按下向下按键 会使热键跳到现在位置后3位 其实就是索引+3  ；</p>
+<p>2 ，也可以在父元素指定每行元素个数 data-num，插件会自动计算上下左右，但是只适合有规律的板块 没有规律就按上面提到的进行指定位置；</p>
+<p>*/</p>
+<br/>
+<h1>API btn.setCurrentIndex(index) 设置索引直接跳到某个位置</h1>
+<br/>
+<h1>API btn.reSetClass(class) 设置分组热键</h1>
+<br/>
+<h1>API btn.reLoad() 重载插件元素</h1>
+
+<h1> 不支持获取class的情况 每个热键设置id </h1>
+<p>var eleIds=new Array();</p>
+<p>for (var i = 1; i <= 15; i++) {</p>
+ 
+<p>    eleIds.push("iptv_"+i)</p>
+<p>}</p>
+ 
+<p>var btn = new tvSysBtnBind({</p>
+ <p>   rules:rules,</p><em>    // 规则列表 顺序左上右下 数字代表相应方向需要变化几位 将会加入建组支持</em>
+    
+ <p>   currentClass:"current",</p>
+ <p>   keyRemoveDefault:false,</p>
+ <p>   eleIds:eleIds,</p>
+ <p>   onEnterPress:function(){</p>
+ <p>     document.getElementById("Jtest").innerHTML=this.current.getAttribute("data-id");</p>
+     
+<p>     console.log(this)</p>
+<em>    // this.target 绑定区域</em>
+ <em>    // this.event 监听</em>
+<em>     // this.current 当前元素</em>
+<em>    // this.currentIndex 当前索引</em>
+<p>    },</p>
+ <p>   onPress:function(){</p>
+        
+<p>    }</p>
+<p>});</p>
+</div>
+ <script type="text/javascript" src="tvSysBtnBind.js"></script>
+<script type="text/javascript">
+
+// new buttonbind({ YTMG3-N6DKC-DKB77-7M9GH-8HVX7
+//  id:"Jdoc",
+//      btnLeft:37,
+//      btnUp:38,
+//      btnRight:39,
+//      btnDown:40,
+//      btnEnter:13,
+//      className:"hotbutton",
+//      setClassName:"current",
+//  onEnterPress:function(e){
+ 
+//   document.getElementById("Jllll").innerHTML=e.getAttribute("data-id");
+//  }
+// });
+
+//插入所有ID名
+// var eleIds=new Array();
+// for (var i = 1; i <= 15; i++) {
+ 
+//     eleIds.push("iptv_"+i)
+// }
+ 
+var btn = new tvSysBtnBind({
+   id:"Jdoc",
+   className:"hotbutton",
+    currentClass:"current",
+    keyRemoveDefault:false,
+    //eleIds:eleIds,//不支持获取class的情况
+    currentIndex:0,
+    onEnterPress:function(){
+      document.getElementById("Jtest").innerHTML=this.current.getAttribute("data-id");
+     
+     //console.log(this)
+ 
+    },
+    onPress:function(){
+
+       //console.log(this.setCurrentIndex(4))
+    }
+});
+btn.currentIndex=9;
+
+/*
+1 ，可以指定按键触发后方向 data-dow="3" 表示当按下向下按键 会使热键跳到现在位置后3位 其实就是索引+3  ；
+2 ，也可以在父元素指定每行元素个数 data-num，插件会自动计算上下左右，但是只适合有规律的板块 没有规律就按上面提到的进行指定位置；
+*/
+</script>
+</body>
+</html>
