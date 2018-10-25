@@ -127,7 +127,10 @@ onPress:function(){
 需要引用MD5插件支持
 加入了焦点记忆功能支持 可以参考http://183.251.62.115:8090/tv/h5v2/template/recommend.html?menu_index=1&menu_id=1
 插件改动不大
-主要利用MD5唯一性 每个不同页面地址转MD5 然后点击的时候 记录当前的currentIndex
+主要利用MD5唯一性 每个不同页面地址转MD5 然后点击的时候 记录当前的currentIndex 
+
+pagemd5:hex_md5(window.location.href) //data的页面地址MD5自动转换
+
 
 ......
 },
