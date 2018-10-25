@@ -127,16 +127,24 @@ onPress:function(){
 加入了焦点记忆功能支持 可以参考http://183.251.62.115:8090/tv/h5v2/template/recommend.html?menu_index=1&menu_id=1
 插件改动不大
 主要利用MD5唯一性 每个不同页面地址转MD5 然后点击的时候 记录当前的currentIndex
-as:
+
 ......
-onEnterPress: function(obj) {
+},
+		onEnterPress: function(obj) {
 			//互绑定按键函数 公用确定按键方法在这
 			var _this = this;
 			 
 			
 			_this.setCookie(comm.data.pagemd5,btn.currentIndex);
+			var url=btn.current.getAttribute("data-href");//文件路径地址
+			 if(url=="isvip"){
+			 	comm.tis("您已经开通了会员啦！");
+			 	return
+			 }
 ......
+
 然后在ajax请求结束再读取
+
 ......
 },checkAjax:function(xhr){
 			var _this = this;
