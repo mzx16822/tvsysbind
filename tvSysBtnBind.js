@@ -196,6 +196,7 @@ if (!("classList" in document.documentElement)) {
         _this.currentIndex = index;
         _this.current = element[index];
         // self.classDo(index)
+         _this.scroll();
       }
       this.viewScrollY = function(view, y) {
 
@@ -256,6 +257,7 @@ if (!("classList" in document.documentElement)) {
         }
       }
       this.onEnterPress = function() {
+
         init.onEnterPress.call(_this);
         
 
@@ -270,6 +272,7 @@ if (!("classList" in document.documentElement)) {
         return scrollTop;
     }
       this.scroll = function(scrollId) {
+        if(!_this.current) return;
         var scrollId = scrollId ? scrollId : _this.current.getAttribute("data-scroll");
 
 
