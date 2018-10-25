@@ -128,14 +128,14 @@ onPress:function(){
 插件改动不大
 主要利用MD5唯一性 每个不同页面地址转MD5 然后点击的时候 记录当前的currentIndex
 as:
-...
+......
 onEnterPress: function(obj) {
 			//互绑定按键函数 公用确定按键方法在这
 			var _this = this;
 			 
 			
 			_this.setCookie(comm.data.pagemd5,btn.currentIndex);
-      ......
+......
 然后在ajax请求结束再读取
 ......
 },checkAjax:function(xhr){
