@@ -124,3 +124,58 @@ onPress:function(){
 }
 
 });
+加入了焦点记忆功能支持 可以参考http://183.251.62.115:8090/tv/h5v2/template/recommend.html?menu_index=1&menu_id=1
+插件改动不大
+主要利用MD5唯一性 每个不同页面地址转MD5 然后点击的时候 记录当前的currentIndex
+as:
+...
+onEnterPress: function(obj) {
+			//互绑定按键函数 公用确定按键方法在这
+			var _this = this;
+			 
+			
+			_this.setCookie(comm.data.pagemd5,btn.currentIndex);
+      ......
+然后在ajax请求结束再读取
+......
+},checkAjax:function(xhr){
+			var _this = this;
+			return xhr.onloadend=function(){
+						_this.data.sum=_this.data.sum-1;
+							if(_this.data.sum<=0){
+
+								console.log("已经全部请求完毕");
+								setTimeout(function(){
+									//自动定位焦点到内容
+									if(_this.data.menulen>0){
+										var currentIndex= parseInt(_this.data.MenuTaglen)+parseInt(_this.data.menulen);
+										if(_this.data.menu_index==6)currentIndex=currentIndex+2;
+										// 	btn.setCurrentIndex(currentIndex);
+											 
+											 if(_this.getCookie(comm.data.pagemd5)) {
+											 	currentIndex=_this.getCookie(comm.data.pagemd5);
+											 }else {
+											 	currentIndex=currentIndex;
+											 } 
+			  									btn.setCurrentIndex(currentIndex);
+			  									if(_this.data.menu_index==1){
+			  									 if (btn.current.parentNode.parentNode.classList.contains("tab2")) {
+											        btn.viewScrollX(mScroll, mScroll.clientWidth)
+											      } else if (btn.current.parentNode.parentNode.classList.contains("tab1")) {
+											        btn.viewScrollX(mScroll, -mScroll.clientWidth)
+											      }
+											     }
+									}
+							
+									btn.reLoad();
+								
+								},20);
+								_this.closeLoading();   
+							}
+
+			        	};
+			
+
+		},closeAjax:function(xhr){
+    ......
+ps: 一些地方会有一些看不见的问题 需要具体制定优化 
