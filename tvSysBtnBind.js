@@ -272,7 +272,10 @@ if (!("classList" in document.documentElement)) {
         return scrollTop;
     }
       this.scroll = function(scrollId) {
+
+
         if(!_this.current) return;
+        if(! _this.current.getAttribute("data-scroll")) return;
         var scrollId = scrollId ? scrollId : _this.current.getAttribute("data-scroll");
 
 
@@ -308,13 +311,22 @@ if (!("classList" in document.documentElement)) {
         }
 
 
-        //页面自动上下滚动
+      
+      }
+      this.onPress = function(e) {
+
+      
+       
+        init.onPress.call(_this);
+        _this.scroll();
+
+                   //页面自动上下滚动
         //comm.tis(document.body.offsetWidth);
         var mainY=0;
         var page = setInterval(function() {
           mainY=mainY+20;
-          
-          if (_this.current.getBoundingClientRect().top < 0) {
+          try{
+            if (_this.current.getBoundingClientRect().top < 0) {
             
             window.scrollTo(0,  window.getScrollTop()-mainY);
 
@@ -326,18 +338,12 @@ if (!("classList" in document.documentElement)) {
             mainY = 0;
             clearInterval(page)
           }
+          }catch(e){
+             clearInterval(page)
+          }
+          
 
         }, 10)
-
-      }
-      this.onPress = function(e) {
-
-      
-       
-        init.onPress.call(_this);
-         _this.scroll();
-
-         
       }
       self.classDo = function(index) {
          element[index].classList.add(currentClass);
