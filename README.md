@@ -3,6 +3,9 @@ tvSysBtnBind 插件说明
 id 内容所在的id值
 
 currentIndex 默认的索引
+prevIndex上一个元素的索引
+current 当前元素
+prev 上一个元素 
 
 btnLeft 键值
 
