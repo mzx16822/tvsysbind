@@ -1,12 +1,6 @@
-function $$(ID,className){
-    if(className){
-            return document.getElementById(ID).getElementsByClassName(className);
-    }else{
-            return document.getElementById(ID);
-    }
-   
+function $$(className){
+   return document.getElementById(className);
 }
- 
 (function (arr) {
     //remove();//兼容
     arr.forEach(function (item) {
@@ -158,28 +152,24 @@ function fireKeyEvent(el, evtType, keyCode) {
                 // _this.current.classList.remove(currentClass);
                 _this.className = item;
                 
-                
+                 
                 _this.reLoad();
-               
+                
                 
 
             }
             this.reLoad = function () {
 
                 //避免无绑定的元素报错 //接口重新reload后依然没数据还是会报错的
-
                 if (typeof (element[0]) == "undefined") {
                     _tempElem = document.createElement("span");
                     _tempElem.setAttribute("class", _this.className + " hide");
                     doc.appendChild(_tempElem);
-                } else if (_this.hotbtn.length > 1&&this.target.getElementsByClassName("hide").length>0) {
-                   
-
-                    this.target.getElementsByClassName("hide")[0].remove();
-                   
+                } else if (_this.hotbtn.length > 1) {
+                    _tempElem.remove();
 
                 }
-                  
+
                 if (doc != null) {
 
                     element = doc.getElementsByClassName(_this.className);
@@ -189,7 +179,6 @@ function fireKeyEvent(el, evtType, keyCode) {
                         element.push(document.getElementById(eleIds[i]))
                     }
                 }
-                
                 if (element.length <= 0) return false;
 
                 if (_this.currentIndex || _this.currentIndex == 0) {
@@ -214,7 +203,6 @@ function fireKeyEvent(el, evtType, keyCode) {
                         _this.sourceLength = element.length;
                     }
                 }
-           
                 isSet = false;
                 _this.prev = element[_this.currentIndex];
                 _this.prevIndex = _this.currentIndex;
@@ -225,16 +213,12 @@ function fireKeyEvent(el, evtType, keyCode) {
 
                 //原本是self.classDo(_this.currentIndex);
                 //现在改成：
-              
-                 
                 if (_this.event.keyCode != 37 && _this.event.keyCode != 38 && _this.event.keyCode != 39 && _this.event.keyCode != 40) {
                     self.rule();
-                 
                 } else {
                     _self.classDo(_this.currentIndex);
-                  
                 }
-                
+
                 // self.classDo(_this.currentIndex);
 
 
@@ -318,7 +302,7 @@ function fireKeyEvent(el, evtType, keyCode) {
 
                     if ( _this.current.getBoundingClientRect().top-view.getBoundingClientRect().top<0) {
                         
-                        _this.viewScrollY(view, _this.current.getBoundingClientRect().top-view.getBoundingClientRect().top  );
+                        _this.viewScrollY(view, -_this.current.getBoundingClientRect().top-view.getBoundingClientRect().top  );
 
                     }else if(_this.current.getBoundingClientRect().bottom-view.getBoundingClientRect().bottom>0){
                         _this.viewScrollY(view, _this.current.getBoundingClientRect().bottom-view.getBoundingClientRect().bottom  );
@@ -361,7 +345,6 @@ function fireKeyEvent(el, evtType, keyCode) {
 
                 init.onPress.call(_this);
                 _this.scroll();
-                 
 
                 //页面自动上下滚动
                 if (document.body.scrollHeight > document.body.clientHeight) {
@@ -492,9 +475,9 @@ function fireKeyEvent(el, evtType, keyCode) {
                     _this.currentIndex = 0;
                 }
 
-                     setTimeout(function () {
+                setTimeout(function () {
                         _self.classDo(_this.currentIndex);
-                    })
+                    }, 0)
                     //原规则走动置后 防止重新渲染
 
             }
