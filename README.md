@@ -36,7 +36,8 @@ data-right="9"
 
 
 rules:{
-
+[
+className:"main",
 0:[0,0,3,1],
 
 1:[0,-1,2,1],
