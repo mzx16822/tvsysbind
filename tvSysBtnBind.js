@@ -6,7 +6,6 @@ function $$(ID,className){
     }
    
 }
- 
 (function (arr) {
     //remove();//兼容
     arr.forEach(function (item) {
@@ -158,28 +157,24 @@ function fireKeyEvent(el, evtType, keyCode) {
                 // _this.current.classList.remove(currentClass);
                 _this.className = item;
                 
-                
+                 
                 _this.reLoad();
-               
+                
                 
 
             }
             this.reLoad = function () {
 
                 //避免无绑定的元素报错 //接口重新reload后依然没数据还是会报错的
-
                 if (typeof (element[0]) == "undefined") {
                     _tempElem = document.createElement("span");
                     _tempElem.setAttribute("class", _this.className + " hide");
                     doc.appendChild(_tempElem);
-                } else if (_this.hotbtn.length > 1&&this.target.getElementsByClassName("hide").length>0) {
-                   
-
-                    this.target.getElementsByClassName("hide")[0].remove();
-                   
+                } else if (_this.hotbtn.length > 1) {
+                    _tempElem.remove();
 
                 }
-                  
+
                 if (doc != null) {
 
                     element = doc.getElementsByClassName(_this.className);
@@ -189,7 +184,6 @@ function fireKeyEvent(el, evtType, keyCode) {
                         element.push(document.getElementById(eleIds[i]))
                     }
                 }
-                
                 if (element.length <= 0) return false;
 
                 if (_this.currentIndex || _this.currentIndex == 0) {
@@ -214,7 +208,6 @@ function fireKeyEvent(el, evtType, keyCode) {
                         _this.sourceLength = element.length;
                     }
                 }
-           
                 isSet = false;
                 _this.prev = element[_this.currentIndex];
                 _this.prevIndex = _this.currentIndex;
@@ -225,16 +218,12 @@ function fireKeyEvent(el, evtType, keyCode) {
 
                 //原本是self.classDo(_this.currentIndex);
                 //现在改成：
-              
-                 
                 if (_this.event.keyCode != 37 && _this.event.keyCode != 38 && _this.event.keyCode != 39 && _this.event.keyCode != 40) {
                     self.rule();
-                 
                 } else {
                     _self.classDo(_this.currentIndex);
-                  
                 }
-                
+
                 // self.classDo(_this.currentIndex);
 
 
@@ -361,7 +350,6 @@ function fireKeyEvent(el, evtType, keyCode) {
 
                 init.onPress.call(_this);
                 _this.scroll();
-                 
 
                 //页面自动上下滚动
                 if (document.body.scrollHeight > document.body.clientHeight) {
@@ -455,6 +443,8 @@ function fireKeyEvent(el, evtType, keyCode) {
                 if (_this.event.keyCode == btnLeft) {
                     if (rules && rules.className == _this.className && rules[_this.currentIndex]) {
                         _this.currentIndex = _this.currentIndex + rules[_this.currentIndex][0];
+                    }else if (rules && typeof rules[_this.className] == "object" && rules[_this.className][_this.currentIndex]) {
+                        _this.currentIndex = _this.currentIndex + rules[_this.className][_this.currentIndex][0];
                     } else {
                         var left = element[_this.currentIndex].getAttribute("data-left");
                         _this.currentIndex = left ? _this.currentIndex = _this.currentIndex - parseInt(left) : _this.currentIndex = _this.currentIndex - 1;
@@ -465,6 +455,8 @@ function fireKeyEvent(el, evtType, keyCode) {
                 } else if (_this.event.keyCode == btnRight) {
                     if (rules && rules.className == _this.className && rules[_this.currentIndex]) {
                         _this.currentIndex = _this.currentIndex + rules[_this.currentIndex][2];
+                    }else if (rules && typeof rules[_this.className] == "object" && rules[_this.className][_this.currentIndex]) {
+                        _this.currentIndex = _this.currentIndex + rules[_this.className][_this.currentIndex][2];
                     } else {
                         var right = element[_this.currentIndex].getAttribute("data-right");
                         _this.currentIndex = right ? _this.currentIndex = _this.currentIndex + parseInt(right) : _this.currentIndex = _this.currentIndex + 1;
@@ -472,6 +464,8 @@ function fireKeyEvent(el, evtType, keyCode) {
                 } else if (_this.event.keyCode == btnUp) {
                     if (rules && rules.className == _this.className && rules[_this.currentIndex]) {
                         _this.currentIndex = _this.currentIndex + rules[_this.currentIndex][1];
+                    }else if (rules && typeof rules[_this.className] == "object" && rules[_this.className][_this.currentIndex]) {
+                        _this.currentIndex = _this.currentIndex + rules[_this.className][_this.currentIndex][1];
                     } else {
                         var up = element[_this.currentIndex].getAttribute("data-up");
                         _this.currentIndex = up ? _this.currentIndex = _this.currentIndex - parseInt(up) : _this.currentIndex = _this.currentIndex - parseInt(num);
@@ -479,6 +473,8 @@ function fireKeyEvent(el, evtType, keyCode) {
                 } else if (_this.event.keyCode == btnDown) {
                     if (rules && rules.className == _this.className && rules[_this.currentIndex]) {
                         _this.currentIndex = _this.currentIndex + rules[_this.currentIndex][3];
+                    }else if (rules && typeof rules[_this.className] == "object" && rules[_this.className][_this.currentIndex]) {
+                        _this.currentIndex = _this.currentIndex + rules[_this.className][_this.currentIndex][3];
                     } else {
                         var dow = element[_this.currentIndex].getAttribute("data-dow");
 
@@ -492,9 +488,9 @@ function fireKeyEvent(el, evtType, keyCode) {
                     _this.currentIndex = 0;
                 }
 
-                     setTimeout(function () {
+                setTimeout(function () {
                         _self.classDo(_this.currentIndex);
-                    })
+                    }, 0)
                     //原规则走动置后 防止重新渲染
 
             }
