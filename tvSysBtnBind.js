@@ -197,12 +197,13 @@ function fireKeyEvent(el, evtType, keyCode) {
                     //页面加载到接口加载不进行计算 重置class也不计算 手动设置焦点不算
 
                     // 如果元素数量发生过变化 将进行换算当前元素 重新算元素索引
-                    if (_this.sourceLength > element.length) {
+                    //修复同组的元素变化的问题
+                    if (_this.prev.classList.contains(_this.className)&&_this.sourceLength > element.length) {
                         //当元素减少
                         _this.currentIndex = _this.currentIndex - (_this.sourceLength - element.length);
                         _this.prevIndex = _this.prevIndex - (_this.sourceLength - element.length);
                         _this.sourceLength = element.length;
-                    } else if (_this.sourceLength < element.length) {
+                    } else if (_this.prev.classList.contains(_this.className)&&_this.sourceLength < element.length) {
                         //当元素增加
                         _this.currentIndex = _this.currentIndex + (element.length - _this.sourceLength);
                         _this.prevIndex = _this.prevIndex + (element.length - _this.sourceLength);
