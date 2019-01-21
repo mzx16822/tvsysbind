@@ -128,7 +128,7 @@ function fireKeyEvent(el, evtType, keyCode) {
             currentIndex = parseInt(currentIndex);
             this.defaultIndex = currentIndex;
             this.lock = false;
-
+            var focusobj=document.createElement("span");
             (typeof init.onEnterPress) == "function" ? init.onEnterPress: init.onEnterPress = function () {};
             (typeof init.onPress) == "function" ? init.onPress: init.onPress = function () {};
             (typeof init.onLoad) == "function" ? init.onLoad: init.onLoad = function () {};
@@ -145,7 +145,8 @@ function fireKeyEvent(el, evtType, keyCode) {
                 _this.currentIndex = currentIndex;
                 _this.target = doc;
                 init.onLoad.call(_this);
-
+                focusobj.classList.add("focusobj");
+                this.target.appendChild(focusobj);
             }
 
             this.reSetClass = function (item, index) {
@@ -398,6 +399,14 @@ function fireKeyEvent(el, evtType, keyCode) {
 
                         element[i].classList.remove(currentClass);
                     }
+                }
+                var effect= element[index].getAttribute("data-effect");
+                if(effect){
+                    focusobj.setAttribute("style","display:block; position: fixed; z-index: 19;width:"+(element[index].getBoundingClientRect().width-6)+"px ;height:"+(element[index].getBoundingClientRect().height-6)+"px; left:"+element[index].getBoundingClientRect().left+"px;top:"+element[index].getBoundingClientRect().top+"px;");
+                    focusobj.setAttribute("class","focusobj "+effect);
+                }  else {
+                    focusobj.setAttribute("class","focusobj")
+                    focusobj.style.display="none";
                 }
 
             }
