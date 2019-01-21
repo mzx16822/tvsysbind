@@ -403,11 +403,11 @@ function fireKeyEvent(el, evtType, keyCode) {
                 }
                 var effect= element[index].getAttribute("data-effect");
                 if(effect){
-                    focusobj.setAttribute("style","display:block; position: fixed; z-index: 19;width:"+(element[index].getBoundingClientRect().width-6)+"px ;height:"+(element[index].getBoundingClientRect().height-6)+"px; left:"+element[index].getBoundingClientRect().left+"px;top:"+element[index].getBoundingClientRect().top+"px;");
+                    focusobj.setAttribute("style","  position: fixed; z-index: 19;width:"+(element[index].getBoundingClientRect().width-6)+"px ;height:"+(element[index].getBoundingClientRect().height-6)+"px; left:"+element[index].getBoundingClientRect().left+"px;top:"+element[index].getBoundingClientRect().top+"px;");
                     focusobj.setAttribute("class","focusobj "+effect);
                 }  else {
-                    focusobj.setAttribute("class","focusobj")
-                    focusobj.style.display="none";
+                    focusobj.setAttribute("class","");
+                     focusobj.setAttribute("style","");
                 }
 
             }
