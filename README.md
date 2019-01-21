@@ -45,6 +45,20 @@ data-right="9"
     }
 /*
 
+加入了光标移动效果 focusobj
+元素加入属性 data-effect="tjw"
+移动焦点如下 tjw属于自定义样式名
+<span class="focusobj tjw" style="display:block; position: fixed; z-index: 19;width:146px ;height:133px; left:631px;top:131px;"></span>
+.focusobj{
+  -webkit-transition: all .3s;
+    -moz-transition: all .3s;
+    -ms-transition: all .3s;
+    -o-transition: all .3s;
+    transition: all .3s;
+    border: solid #D9A404 3px;
+    border-radius: 9px;
+}
+
 v
 1 ，可以指定按键触发后方向 data-dow="3" 表示当按下向下按键 会使热键跳到现在位置后3位 其实就是索引+3 ；
 
