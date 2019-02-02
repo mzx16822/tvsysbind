@@ -148,18 +148,12 @@ function fireKeyEvent(el, evtType, keyCode) {
 
             this.reSetClass = function (item, index) {
                 //新组别 用于弹窗 不同组热键 API
-
                 index = index ? index : 0;
                 _this.currentIndex = index;
                 _this.prevIndex = index;
                 // _this.current.classList.remove(currentClass);
                 _this.className = item;
-                
-                 
                 _this.reLoad();
-                
-                
-
             }
             this.reLoad = function () {
 
@@ -208,7 +202,7 @@ function fireKeyEvent(el, evtType, keyCode) {
                 _this.prevIndex = _this.currentIndex;
                 _this.current = element[_this.currentIndex];
                 _this.currentIndex = _this.currentIndex;
- 
+                
                 _self.classDo(_this.currentIndex);
                 // self.classDo(_this.currentIndex);
 
@@ -217,6 +211,7 @@ function fireKeyEvent(el, evtType, keyCode) {
                     this.hotbtn[i].setAttribute("data-id", i);
 
                 }
+
 
 
             }
@@ -337,7 +332,7 @@ function fireKeyEvent(el, evtType, keyCode) {
             }
             this.onPress = function (e) {
                 init.onPress.call(_this);
-                _this.scroll(); 
+                
             }
             var isload = 0;
             self.classDo = function (index) {
@@ -355,10 +350,10 @@ function fireKeyEvent(el, evtType, keyCode) {
                         element[i].classList.remove(currentClass);
                     }
                 }
-                
+                _this.scroll();//渲染的之前先复位
                 var effect= element[index].getAttribute("data-effect");
                 if(effect){
-                    focusobj.setAttribute("style","  position: fixed; z-index: 19;width:"+(element[index].getBoundingClientRect().width -6)+"px ;height:"+(element[index].getBoundingClientRect().height-6 )+"px; left:"+element[index].getBoundingClientRect().left+"px;top:"+element[index].getBoundingClientRect().top+"px;");
+                    focusobj.setAttribute("style","  position: fixed; z-index: 19;width:"+(element[index].getBoundingClientRect().width)+"px ;height:"+(element[index].getBoundingClientRect().height)+"px; left:"+element[index].getBoundingClientRect().left+"px;top:"+element[index].getBoundingClientRect().top+"px;");
                     focusobj.setAttribute("class","focusobj current "+effect);
                 }  else {
                     focusobj.setAttribute("class","hide ");
@@ -384,12 +379,7 @@ function fireKeyEvent(el, evtType, keyCode) {
 
 
             EventUtil.add(document, function (e) {
-
-                 
                     _this.onPressdo(e);
-               
-
-
             });
             self.overIndex=function(){
                 //防止超出
@@ -460,17 +450,13 @@ function fireKeyEvent(el, evtType, keyCode) {
                     _this.current = element[_this.currentIndex];
                     _this.currentIndex = _this.currentIndex;
                     _this.className = _this.className;
-                    keydefault(e);
-                    //self.classDo(_this.currentIndex);
                     _this.onPress.call(_this);
-                    if (e.keyCode == btnEnter) {
-                        _this.onEnterPress.call(_this)
-                    }
+                    if (e.keyCode == btnEnter)_this.onEnterPress.call(_this);
                     _self.classDo(_this.currentIndex);
-                    _this.scroll();
-                }
+                    keydefault(e);
+            }
                  
-                this.onLoad();
+            this.onLoad();//插件加载时
 
 
         }
