@@ -119,15 +119,10 @@ function fireKeyEvent(el, evtType, keyCode) {
                 direction = "y";
             _this.className = init.className ? init.className : "hotbutton";
             this.event = {};
-            var sumX = 0,
-                timesX = 0,
-                sumY = 0,
-                timesY = 0;
-            var eleIds = init.eleIds ? init.eleIds : false;
+             
             var _tempElem;
             currentIndex = parseInt(currentIndex);
             this.defaultIndex = currentIndex;
-            this.lock = false;
             var focusobj=document.createElement("span");
             (typeof init.onEnterPress) == "function" ? init.onEnterPress: init.onEnterPress = function () {};
             (typeof init.onPress) == "function" ? init.onPress: init.onPress = function () {};
@@ -145,7 +140,9 @@ function fireKeyEvent(el, evtType, keyCode) {
                 _this.currentIndex = currentIndex;
                 _this.target = doc;
                 init.onLoad.call(_this);
+                focusobj.innerHTML='<div class="cssbk"><b class="lt"></b><b class="t"></b><b class="rt"></b><b class="r"></b><b class="rb"></b><b class="b"></b><b class="lb"></b> <b class="l"></b></div>';
                 focusobj.classList.add("focusobj");
+                focusobj.classList.add("current");
                 this.target.appendChild(focusobj);
             }
 
@@ -172,19 +169,15 @@ function fireKeyEvent(el, evtType, keyCode) {
                     _tempElem.setAttribute("class", _this.className + " hide");
                     doc.appendChild(_tempElem);
                 } else if (_this.hotbtn.length > 1) {
+                    if(_tempElem)
                     _tempElem.remove();
-
                 }
 
                 if (doc != null) {
 
                     element = doc.getElementsByClassName(_this.className);
                     this.hotbtn = element;
-                } else {
-                    for (var i = 0; i < eleIds.length; i++) {
-                        element.push(document.getElementById(eleIds[i]))
-                    }
-                }
+                }  
                 if (element.length <= 0) return false;
 
                 if (_this.currentIndex || _this.currentIndex == 0) {
@@ -215,17 +208,8 @@ function fireKeyEvent(el, evtType, keyCode) {
                 _this.prevIndex = _this.currentIndex;
                 _this.current = element[_this.currentIndex];
                 _this.currentIndex = _this.currentIndex;
-
-
-
-                //原本是self.classDo(_this.currentIndex);
-                //现在改成：
-                if (_this.event.keyCode != 37 && _this.event.keyCode != 38 && _this.event.keyCode != 39 && _this.event.keyCode != 40) {
-                    self.rule();
-                } else {
-                    _self.classDo(_this.currentIndex);
-                }
-
+ 
+                _self.classDo(_this.currentIndex);
                 // self.classDo(_this.currentIndex);
 
 
@@ -238,7 +222,12 @@ function fireKeyEvent(el, evtType, keyCode) {
             }
 
             function keydefault(e) {
-                if (keyRemoveDefault) window.event ? window.event.returnValue = false : e.preventDefault()
+                try{
+                    if (keyRemoveDefault) window.event ? window.event.returnValue = false : e.preventDefault(); 
+                }catch(e){
+                    //不支持浏览器按键的时候会报错
+                }
+               
             }
 
             this.hasClass = function (obj, cls) {
@@ -270,7 +259,7 @@ function fireKeyEvent(el, evtType, keyCode) {
                 _this.currentIndex = index;
                 _this.current = element[index];
 
-                _this.scroll();
+               
             }
             this.viewScrollY = function (view, y) {
 
@@ -347,39 +336,8 @@ function fireKeyEvent(el, evtType, keyCode) {
 
             }
             this.onPress = function (e) {
-
-
-
                 init.onPress.call(_this);
-                _this.scroll();
-
-                //页面自动上下滚动
-                if (document.body.scrollHeight > document.body.clientHeight) {
-
-
-                    var mainY = 0;
-                    var page = setInterval(function () {
-                        mainY = mainY + 20;
-                        try {
-                            if (_this.current.getBoundingClientRect().top < 0) {
-
-                                window.scrollTo(0, window.getScrollTop() - mainY);
-
-                            } else if (_this.current.getBoundingClientRect().bottom > document.body.offsetHeight) {
-
-                                window.scrollTo(0, window.getScrollTop() + mainY);
-                            } else {
-
-                                mainY = 0;
-                                clearInterval(page)
-                            }
-                        } catch (e) {
-                            clearInterval(page)
-                        }
-
-
-                    }, 10);
-                }
+                _this.scroll(); 
             }
             var isload = 0;
             self.classDo = function (index) {
@@ -389,11 +347,7 @@ function fireKeyEvent(el, evtType, keyCode) {
                     _this.sourceLength = element.length;
 
                 }
-                try {
-                    element[index].classList.add(currentClass);
-                } catch (e) {
-                    console.log(index);
-                }
+                element[index].classList.add(currentClass);
 
                 for (var i = 0; i < element.length; i++) {
                     if (i != index) {
@@ -401,14 +355,16 @@ function fireKeyEvent(el, evtType, keyCode) {
                         element[i].classList.remove(currentClass);
                     }
                 }
+                
                 var effect= element[index].getAttribute("data-effect");
                 if(effect){
-                    focusobj.setAttribute("style","  position: fixed; z-index: 19;width:"+(element[index].getBoundingClientRect().width-6)+"px ;height:"+(element[index].getBoundingClientRect().height-6)+"px; left:"+element[index].getBoundingClientRect().left+"px;top:"+element[index].getBoundingClientRect().top+"px;");
-                    focusobj.setAttribute("class","focusobj "+effect);
+                    focusobj.setAttribute("style","  position: fixed; z-index: 19;width:"+(element[index].getBoundingClientRect().width -6)+"px ;height:"+(element[index].getBoundingClientRect().height-6 )+"px; left:"+element[index].getBoundingClientRect().left+"px;top:"+element[index].getBoundingClientRect().top+"px;");
+                    focusobj.setAttribute("class","focusobj current "+effect);
                 }  else {
-                    focusobj.setAttribute("class","");
+                    focusobj.setAttribute("class","hide ");
                      focusobj.setAttribute("style","");
                 }
+                
 
             }
 
@@ -429,24 +385,24 @@ function fireKeyEvent(el, evtType, keyCode) {
 
             EventUtil.add(document, function (e) {
 
-                if (!_this.lock) {
-                    _self.EventUtil(e);
-                }
+                 
+                    _this.onPressdo(e);
+               
 
 
             });
-            self.rule = function () {
-                // rules={   l u r d
-                //    0:[0,0,0,0],
-                //    1:[0,0,0,0]
-                //  }
-
+            self.overIndex=function(){
+                //防止超出
                 if (_this.currentIndex >= element.length - 1) {
                     _this.currentIndex = element.length - 1;
                 }
                 if (_this.currentIndex < 0) {
                     _this.currentIndex = 0;
                 }
+            }
+            self.rule = function () {
+                  
+                self.overIndex();
 
                 var num = element[_this.currentIndex].parentNode.parentNode.parentNode.getAttribute("data-num") || element[_this.currentIndex].parentNode.parentNode.getAttribute("data-num") || element[_this.currentIndex].parentNode.getAttribute("data-num") || element[_this.currentIndex].parentNode.children.length;
 
@@ -491,20 +447,11 @@ function fireKeyEvent(el, evtType, keyCode) {
                         _this.currentIndex = dow ? _this.currentIndex = _this.currentIndex + parseInt(dow) : _this.currentIndex = _this.currentIndex + parseInt(num);
                     }
                 }
-                if (_this.currentIndex > element.length - 1) {
-                    _this.currentIndex = element.length - 1;
-                }
-                if (_this.currentIndex < 0) {
-                    _this.currentIndex = 0;
-                }
-
-                setTimeout(function () {
-                        _self.classDo(_this.currentIndex);
-                    }, 0)
-                    //原规则走动置后 防止重新渲染
+                self.overIndex();
+                
 
             }
-            self.EventUtil = function (e) {
+            this.onPressdo = function (e) {
                     _this.event = e;
                     _this.currentIndex = _this.currentIndex >= element.length - 1 ? element.length - 1 : _this.currentIndex;
                     _this.prev = element[_this.currentIndex];
@@ -519,9 +466,12 @@ function fireKeyEvent(el, evtType, keyCode) {
                     if (e.keyCode == btnEnter) {
                         _this.onEnterPress.call(_this)
                     }
+                    _self.classDo(_this.currentIndex);
+                    _this.scroll();
                 }
-                //console.log(this.onLoad)
-            this.onLoad();
+                 
+                this.onLoad();
+
 
         }
 
