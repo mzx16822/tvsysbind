@@ -342,8 +342,10 @@ function fireKeyEvent(el, evtType, keyCode) {
                     _this.sourceLength = element.length;
 
                 }
+                if(element[index])
                 element[index].classList.add(currentClass);
-
+                else return;
+                //如果元素不存在 不进行渲染 待重载
                 for (var i = 0; i < element.length; i++) {
                     if (i != index) {
 
