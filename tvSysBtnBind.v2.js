@@ -1,11 +1,4 @@
-function $$(ID,className){
-    if(className){
-            return document.getElementById(ID).getElementsByClassName(className);
-    }else{
-            return document.getElementById(ID);
-    }
-   
-}
+
 (function (arr) {
     //remove();//兼容
     arr.forEach(function (item) {
@@ -103,9 +96,9 @@ function fireKeyEvent(el, evtType, keyCode) {
         var tvSysBtnBind = function (init) {
             var _this = this,
                 _self = self;
-            var id = init.id ? init.id : "",
+            var id = init.id ? init.id : "Jdoc",
                 keyRemoveDefault = init.keyRemoveDefault ? true : false,
-                currentIndex = init.currentIndex ? init.currentIndex : 0,
+                currentIndex = init.currentIndex ? parseInt(init.currentIndex): 0,
                 btnLeft = init.btnLeft ? init.btnLeft : 37,
                 btnUp = init.btnUp ? init.btnUp : 38,
                 btnRight = init.btnRight ? init.btnRight : 39,
@@ -121,13 +114,11 @@ function fireKeyEvent(el, evtType, keyCode) {
             this.event = {};
              
             var _tempElem;
-            currentIndex = parseInt(currentIndex);
-            this.defaultIndex = currentIndex;
+            this.currentIndex = parseInt(currentIndex);
+            this.defaultIndex = parseInt(currentIndex);
+            this.prevFocus={};
             var focusobj=document.createElement("span");
-            (typeof init.onEnterPress) == "function" ? init.onEnterPress: init.onEnterPress = function () {};
-            (typeof init.onPress) == "function" ? init.onPress: init.onPress = function () {};
             (typeof init.onLoad) == "function" ? init.onLoad: init.onLoad = function () {};
-
             this.onLoad = function () {
 
                 _this.reLoad();
@@ -148,25 +139,41 @@ function fireKeyEvent(el, evtType, keyCode) {
 
             this.reSetClass = function (item, index) {
                 //新组别 用于弹窗 不同组热键 API
+                _this.prevFocus[_this.className]=_this.currentIndex;//记录上一组焦点
                 index = index ? index : 0;
-                _this.currentIndex = index;
-                _this.prevIndex = index;
-                // _this.current.classList.remove(currentClass);
+                _this.prev.classList.remove(currentClass);
                 _this.className = item;
+               _this.prevIndex= _this.currentIndex=_this.prevFocus[item]?_this.prevFocus[item]:index;
                 _this.reLoad();
             }
-            this.reLoad = function () {
 
-                //避免无绑定的元素报错 //接口重新reload后依然没数据还是会报错的
-                if (typeof (element[0]) == "undefined") {
-                    _tempElem = document.createElement("span");
-                    _tempElem.setAttribute("class", _this.className + " hide");
-                    doc.appendChild(_tempElem);
-                } else if (_this.hotbtn.length > 1) {
-                    if(_tempElem)
-                    _tempElem.remove();
+            self.readFn=function(){
+
+                if((typeof init.onEnterPress) == "function"){
+                    init.onEnterPress
+                }else{
+                    init.onEnterPress = function () {}
+                    
                 }
+                
+                
+               
 
+                if((typeof init.onPress) == "function"){
+                    init.onPress
+                }else{
+                    init.onPress = function () {}
+                     
+                }
+               
+                
+
+            }
+
+            this.reLoad = function () {
+            
+             
+            self.readFn();
                 if (doc != null) {
 
                     element = doc.getElementsByClassName(_this.className);
@@ -204,9 +211,7 @@ function fireKeyEvent(el, evtType, keyCode) {
                 _this.currentIndex = _this.currentIndex;
                 
                 _self.classDo(_this.currentIndex);
-                // self.classDo(_this.currentIndex);
-
-
+                 
                 for (var i = 0; i < this.hotbtn.length; i++) {
                     this.hotbtn[i].setAttribute("data-id", i);
 
@@ -225,26 +230,7 @@ function fireKeyEvent(el, evtType, keyCode) {
                
             }
 
-            this.hasClass = function (obj, cls) {
-
-                return obj.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'))
-            }
-            this.addClass = function (obj, cls) {
-                if (!_this.hasClass(obj, cls)) obj.className += " " + cls
-            }
-            this.removeClass = function (obj, cls) {
-                if (_this.hasClass(obj, cls)) {
-                    var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
-                    obj.className = obj.className.replace(reg, ' ')
-                }
-            }
-            this.toggleClass = function (obj, cls) {
-                if (_this.hasClass(obj, cls)) {
-                    _this.removeClass(obj, cls)
-                } else {
-                    _this.addClass(obj, cls)
-                }
-            }
+           
             var isSet = false;
             this.setCurrentIndex = function (index) {
                 isSet = true;
@@ -265,12 +251,20 @@ function fireKeyEvent(el, evtType, keyCode) {
 
                 view.scrollLeft = view.scrollLeft + x+(x*0.1);
             }
+
+            
+            this.onPress = function (e) {
+                init.onPress.call(_this);
+              
+            }
+            
             this.onEnterPress = function () {
 
                 init.onEnterPress.call(_this);
-
+               
 
             }
+
             self.getScrollTop = function () {
                 var scrollTop = 0;
                 if (document.documentElement && document.documentElement.scrollTop) {
@@ -335,10 +329,8 @@ function fireKeyEvent(el, evtType, keyCode) {
 
 
             }
-            this.onPress = function (e) {
-                init.onPress.call(_this);
-                
-            }
+            
+              
             var isload = 0;
             self.classDo = function (index) {
                 isload = isload + 1;
@@ -347,12 +339,13 @@ function fireKeyEvent(el, evtType, keyCode) {
                     _this.sourceLength = element.length;
 
                 }
+
                 if(element[index])
                 element[index].classList.add(currentClass);
                 else return;
                 //如果元素不存在 不进行渲染 待重载
                 for (var i = 0; i < element.length; i++) {
-                    if (i != index) {
+                    if (i!=index&&element[i].classList.contains(currentClass)) {
 
                         element[i].classList.remove(currentClass);
                     }
@@ -397,56 +390,72 @@ function fireKeyEvent(el, evtType, keyCode) {
                     _this.currentIndex = 0;
                 }
             }
+            self.isNumber = function(val){
+
+                var regPos = /^\d+(\.\d+)?$/; //非负浮点数
+                var regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/; //负浮点数
+                if(regPos.test(val) || regNeg.test(val)){
+                    return true;
+                }else{
+                    return false;
+                }
+
+            }
+            self.ruleFn=function(index,direction){
+                   if(rules && typeof rules[_this.className] == "object" &&typeof rules[_this.className]["line"] !="undefined" )
+                    {
+                        var line = rules[_this.className]["line"];
+                    }else{
+                        var line=1;
+                    }
+                   line=parseInt(line);
+                   if (rules && typeof rules[_this.className] == "object" && typeof rules[_this.className][_this.currentIndex]!="undefined"&& typeof rules[_this.className][_this.currentIndex][index]!="undefined") {
+                         var objRules = rules[_this.className][_this.currentIndex];
+                        if(self.isNumber(objRules[index])){
+                            _this.currentIndex = parseInt(_this.currentIndex) + parseInt(objRules[index]);
+                        }else if(Array.isArray(objRules[index])){
+                            //_this.currentIndex = _this.currentIndex + parseInt(objRules[index][1]); 
+                            _this.reSetClass(objRules[index][0], objRules[index][1]);
+                        }else if(typeof rules[_this.className]["line"] !="undefined"){
+
+                            _this.currentIndex = _this.currentIndex + line; 
+                        }
+                        
+                    } else {
+                        var jump = element[_this.currentIndex].getAttribute("data-"+direction);
+                         jump=parseInt(jump);
+                          var obj = rules[_this.className];
+                        if(direction=="up"){
+                            if(_this.currentIndex>line-1) //上边沿
+                            _this.currentIndex= jump?_this.currentIndex-jump:_this.currentIndex-line;
+                            else if(obj&&typeof obj["up"]!="undefined" )  _this.reSetClass(obj["up"][0], obj["up"][1]);
+                        }else if(direction=="left"){
+                            if((_this.currentIndex)%line!=0) //左边
+                            _this.currentIndex= jump?_this.currentIndex-jump:_this.currentIndex-1;
+                            else if(obj&&typeof obj["left"]!="undefined" )  _this.reSetClass(obj["left"][0], obj["left"][1]);
+                        }else if(direction=="right"){
+                            if((_this.currentIndex+1)%line!=0)  //右边
+                            _this.currentIndex= jump?_this.currentIndex+jump:_this.currentIndex+1;
+                            else if(obj&&typeof obj["right"]!="undefined" ) _this.reSetClass(obj["right"][0], obj["right"][1]);
+                        }else if(direction=="down"){
+                             if(_this.hotbtn.length-line>_this.currentIndex) //下边沿
+                            _this.currentIndex= jump?_this.currentIndex+jump:_this.currentIndex+line;
+                            else if(obj&&typeof obj["down"]!="undefined" )  _this.reSetClass(obj["down"][0], obj["down"][1]);
+                        }
+                    }
+            }
             self.rule = function () {
-                  
                 self.overIndex();
-
-                var num = element[_this.currentIndex].parentNode.parentNode.parentNode.getAttribute("data-num") || element[_this.currentIndex].parentNode.parentNode.getAttribute("data-num") || element[_this.currentIndex].parentNode.getAttribute("data-num") || element[_this.currentIndex].parentNode.children.length;
-                
                 if (_this.event.keyCode == btnLeft) {
-                    if (rules && rules.className == _this.className && rules[_this.currentIndex]) {
-                        _this.currentIndex = _this.currentIndex + rules[_this.currentIndex][0];
-                    }else if (rules && typeof rules[_this.className] == "object" && rules[_this.className][_this.currentIndex]) {
-                        _this.currentIndex = _this.currentIndex + rules[_this.className][_this.currentIndex][0];
-                    } else {
-                        var left = element[_this.currentIndex].getAttribute("data-left");
-                        _this.currentIndex = left ? _this.currentIndex = _this.currentIndex - parseInt(left) : _this.currentIndex = _this.currentIndex - 1;
-                    }
-
-
-
+                    self.ruleFn(0,"left");
                 } else if (_this.event.keyCode == btnRight) {
-                    if (rules && rules.className == _this.className && rules[_this.currentIndex]) {
-                        _this.currentIndex = _this.currentIndex + rules[_this.currentIndex][2];
-                    }else if (rules && typeof rules[_this.className] == "object" && rules[_this.className][_this.currentIndex]) {
-                        _this.currentIndex = _this.currentIndex + rules[_this.className][_this.currentIndex][2];
-                    } else {
-                        var right = element[_this.currentIndex].getAttribute("data-right");
-                        _this.currentIndex = right ? _this.currentIndex = _this.currentIndex + parseInt(right) : _this.currentIndex = _this.currentIndex + 1;
-                    }
+                    self.ruleFn(2,"right");
                 } else if (_this.event.keyCode == btnUp) {
-                    if (rules && rules.className == _this.className && rules[_this.currentIndex]) {
-                        _this.currentIndex = _this.currentIndex + rules[_this.currentIndex][1];
-                    }else if (rules && typeof rules[_this.className] == "object" && rules[_this.className][_this.currentIndex]) {
-                        _this.currentIndex = _this.currentIndex + rules[_this.className][_this.currentIndex][1];
-                    } else {
-                        var up = element[_this.currentIndex].getAttribute("data-up");
-                        _this.currentIndex = up ? _this.currentIndex = _this.currentIndex - parseInt(up) : _this.currentIndex = _this.currentIndex - parseInt(num);
-                    }
+                    self.ruleFn(1,"up");
                 } else if (_this.event.keyCode == btnDown) {
-                    if (rules && rules.className == _this.className && rules[_this.currentIndex]) {
-                        _this.currentIndex = _this.currentIndex + rules[_this.currentIndex][3];
-                    }else if (rules && typeof rules[_this.className] == "object" && rules[_this.className][_this.currentIndex]) {
-                        _this.currentIndex = _this.currentIndex + rules[_this.className][_this.currentIndex][3];
-                    } else {
-                        var dow = element[_this.currentIndex].getAttribute("data-dow");
-
-                        _this.currentIndex = dow ? _this.currentIndex = _this.currentIndex + parseInt(dow) : _this.currentIndex = _this.currentIndex + parseInt(num);
-                    }
+                    self.ruleFn(3,"down");
                 }
                 self.overIndex();
-                
-
             }
             this.onPressdo = function (e) {
                     _this.event = e;
@@ -457,16 +466,25 @@ function fireKeyEvent(el, evtType, keyCode) {
                     _this.current = element[_this.currentIndex];
                     _this.currentIndex = _this.currentIndex;
                     _this.className = _this.className;
-                    _this.onPress.call(_this);
-                    if (e.keyCode == btnEnter)_this.onEnterPress.call(_this);
+                    
+                    if((typeof init.rules[_this.className]["onPress"]) == "function")
+                    init.rules[_this.className]["onPress"].call(_this);
+                    else _this.onPress.call(_this);
+                    if (e.keyCode == btnEnter){
+                        
+                        if((typeof init.rules[_this.className]["onEnterPress"]) == "function")
+                        init.rules[_this.className]["onEnterPress"].call(_this);
+                        else _this.onEnterPress.call(_this);
+                    }
+                      
                     _self.classDo(_this.currentIndex);
                     keydefault(e);
             }
                  
-            this.onLoad();//插件加载时
+            
 
-
+         this.onLoad();//插件加载时   
         }
-
+        
         window.tvSysBtnBind = tvSysBtnBind;
     })(window)

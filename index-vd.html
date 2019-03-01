@@ -95,10 +95,10 @@ a,button,input{
     <div class="header">
             <div class="inner">
                 <div class="nav">
-                    <a href="#1" class="hotbutton" id="iptv_1" data-id="1001" data-dow="4">主页</a>
-                    <a href="#2" class="hotbutton" id="iptv_2" data-id="1002" data-dow="3">游戏</a>
-                    <a href="#3" class="hotbutton" id="iptv_3" data-id="1003" data-dow="2">生活</a>
-                    <a href="#4" class="hotbutton" id="iptv_4" data-id="1004" data-dow="1" >新闻</a>
+                    <a href="#1" class="hotbutton main" id="iptv_1" data-id="1001" data-down="4">主页</a>
+                    <a href="#2" class="hotbutton main" id="iptv_2" data-id="1002" data-down="3">游戏</a>
+                    <a href="#3" class="hotbutton main" id="iptv_3" data-id="1003" data-down="2">生活</a>
+                    <a href="#4" class="hotbutton main" id="iptv_4" data-id="1004" data-down="1" >新闻</a>
                      
                 </div>
             </div>
@@ -220,7 +220,7 @@ a,button,input{
 <p>    }</p>
 <p>});</p>
 </div>
- <script type="text/javascript" src="tvSysBtnBind.js"></script>
+ <script type="text/javascript" src="tvSysBtnBind.v2.js"></script>
 <script type="text/javascript">
 
 // new buttonbind({ YTMG3-N6DKC-DKB77-7M9GH-8HVX7
@@ -244,27 +244,31 @@ a,button,input{
  
 //     eleIds.push("iptv_"+i)
 // }
- 
-var btn = new tvSysBtnBind({
-   id:"Jdoc",
-   className:"hotbutton",
-    currentClass:"current",
-    keyRemoveDefault:false,
-    //eleIds:eleIds,//不支持获取class的情况
-    currentIndex:0,
-    onEnterPress:function(){
-      document.getElementById("Jtest").innerHTML=this.current.getAttribute("data-id");
-     
-     //console.log(this)
- 
+ var rules={
+"hotbutton":{ 
+    4:[-1,["main",0],0,0],
+    5:[-1,["main",1],0,0],
+    6:[-1,["main",2],0,0],
+    7:[-1,["main",3],0,0],
+}};
+
+var config={
+    rules:rules,
+   onEnterPress:function(){
+    
     },
     onPress:function(){
-
-       //console.log(this.setCurrentIndex(4))
+      console.log("898")
     }
-});
-btn.currentIndex=9;
-
+}
+config.onPress_main=function(){
+    console.log("main fn")
+}
+var btn = new tvSysBtnBind(config);
+ 
+// btn.onPress_main=function(){
+//     console.log("main");
+// }
 /*
 1 ，可以指定按键触发后方向 data-dow="3" 表示当按下向下按键 会使热键跳到现在位置后3位 其实就是索引+3  ；
 2 ，也可以在父元素指定每行元素个数 data-num，插件会自动计算上下左右，但是只适合有规律的板块 没有规律就按上面提到的进行指定位置；
