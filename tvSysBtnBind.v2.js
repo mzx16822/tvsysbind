@@ -96,7 +96,7 @@ function fireKeyEvent(el, evtType, keyCode) {
         var tvSysBtnBind = function (init) {
             var _this = this,
                 _self = self;
-            var id = init.id ? init.id : "Jdoc",
+            var id = init.id ? init.id : null,
                 keyRemoveDefault = init.keyRemoveDefault ? true : false,
                 currentIndex = init.currentIndex ? parseInt(init.currentIndex): 0,
                 btnLeft = init.btnLeft ? init.btnLeft : 37,
@@ -105,7 +105,7 @@ function fireKeyEvent(el, evtType, keyCode) {
                 btnDown = init.btnDown ? init.btnDown : 40,
                 btnEnter = init.btnEnter ? init.btnEnter : 13,
                 currentClass = init.currentClass ? init.currentClass : "current",
-                doc = document.getElementById(id),
+                doc = id?document.getElementById(id):document.body,
                 effect = init.effect ? init.effect : "slide1",
                 element = new Array(),
                 rules = Object.prototype.toString.call(init.rules) == '[object Object]' ? init.rules : null,
