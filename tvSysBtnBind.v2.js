@@ -104,6 +104,7 @@ function fireKeyEvent(el, evtType, keyCode) {
                 btnRight = init.btnRight ? init.btnRight : 39,
                 btnDown = init.btnDown ? init.btnDown : 40,
                 btnEnter = init.btnEnter ? init.btnEnter : 13,
+                history = init.history ? init.history : true,
                 currentClass = init.currentClass ? init.currentClass : "current",
                 doc = id?document.getElementById(id):document.body,
                 effect = init.effect ? init.effect : "slide1",
@@ -116,13 +117,13 @@ function fireKeyEvent(el, evtType, keyCode) {
             var _tempElem;
             this.currentIndex = parseInt(currentIndex);
             this.defaultIndex = parseInt(currentIndex);
-            this.prevFocus={};
-            var focusobj=document.createElement("span");
+            this.historyFocus={};
+            if(!focusobj)var focusobj=document.createElement("span");
             (typeof init.onLoad) == "function" ? init.onLoad: init.onLoad = function () {};
             this.onLoad = function () {
 
                 _this.reLoad();
-                this.sourceClass = _this.className;
+                this.sourceClassName = _this.className;
                 this.sourceLength = element.length;
                 //element[currentIndex].classList.add(currentClass);
                 _this.prev = element[currentIndex];
@@ -139,11 +140,12 @@ function fireKeyEvent(el, evtType, keyCode) {
 
             this.reSetClass = function (item, index) {
                 //新组别 用于弹窗 不同组热键 API
-                _this.prevFocus[_this.className]=_this.currentIndex;//记录上一组焦点
+                if(history) //记录开关
+                _this.historyFocus[_this.className]=_this.currentIndex;//记录上一组焦点
                 index = index ? index : 0;
                 _this.prev.classList.remove(currentClass);
                 _this.className = item;
-               _this.prevIndex= _this.currentIndex=_this.prevFocus[item]?_this.prevFocus[item]:index;
+               _this.prevIndex= _this.currentIndex=_this.historyFocus[item]?_this.historyFocus[item]:index;
                 _this.reLoad();
             }
 
@@ -401,6 +403,7 @@ function fireKeyEvent(el, evtType, keyCode) {
                 }
 
             }
+             
             self.ruleFn=function(index,direction){
                    if(rules && typeof rules[_this.className] == "object" &&typeof rules[_this.className]["line"] !="undefined" )
                     {
@@ -419,7 +422,7 @@ function fireKeyEvent(el, evtType, keyCode) {
                         }else if(typeof rules[_this.className]["line"] !="undefined"){
 
                             _this.currentIndex = _this.currentIndex + line; 
-                        }
+                        } 
                         
                     } else {
                         var jump = element[_this.currentIndex].getAttribute("data-"+direction);
@@ -428,7 +431,7 @@ function fireKeyEvent(el, evtType, keyCode) {
                         if(direction=="up"){
                             if(_this.currentIndex>line-1) //上边沿
                             _this.currentIndex= jump?_this.currentIndex-jump:_this.currentIndex-line;
-                            else if(obj&&typeof obj["up"]!="undefined" )  _this.reSetClass(obj["up"][0], obj["up"][1]);
+                            else if(obj&&typeof obj["up"]!="undefined" )  _this.reSetClass(obj[direction][0], obj["up"][1]);
                         }else if(direction=="left"){
                             if((_this.currentIndex)%line!=0) //左边
                             _this.currentIndex= jump?_this.currentIndex-jump:_this.currentIndex-1;
