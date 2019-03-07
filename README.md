@@ -4,7 +4,7 @@
 	            <h1 id="plugin">tvSysBtnBind.V2 焦点移动插件</h1>
 	        </div>
 	        <p>旧版不适合复杂逻辑页面，具体可以参考以往项目代码或者github代码</p>
-	        <p>抛砖引玉,期待各位的意见反馈 @大雄</p>
+	        <p>抛砖引玉,期待各位的意见反馈 @大雄 mzx16822@126.com</p>
 	        <p>参考案例 <a href="http://120.78.169.79:6001/sxrj/loading.html" target="_blank">书香人家</a></p>
 	        <h2>配置参数列表</h2>
 
