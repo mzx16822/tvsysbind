@@ -381,7 +381,7 @@ function fireKeyEvent(el, evtType, keyCode) {
 
 
             EventUtil.add(document, function (e) {
-                    _this.onPressdo(e);
+                    _self.onPressdo(e);
             });
             self.overIndex=function(){
                 //防止超出
@@ -460,7 +460,7 @@ function fireKeyEvent(el, evtType, keyCode) {
                 }
                 self.overIndex();
             }
-            this.onPressdo = function (e) {
+            self.onPressdo = function (e) {
                     _this.event = e;
                     _this.currentIndex = _this.currentIndex >= element.length - 1 ? element.length - 1 : _this.currentIndex;
                     _this.prev = element[_this.currentIndex];
