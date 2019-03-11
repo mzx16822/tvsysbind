@@ -118,7 +118,7 @@ function fireKeyEvent(el, evtType, keyCode) {
             this.currentIndex = parseInt(currentIndex);
             this.defaultIndex = parseInt(currentIndex);
             this.historyFocus={};
-            if(!focusobj)var focusobj=document.createElement("span");
+            if(!window.focusobj)window.focusobj=document.createElement("span");
             (typeof init.onLoad) == "function" ? init.onLoad: init.onLoad = function () {};
             this.onLoad = function () {
 
@@ -244,14 +244,18 @@ function fireKeyEvent(el, evtType, keyCode) {
 
                
             }
-            this.viewScrollY = function (view, y) {
-
-                view.scrollTop = view.scrollTop + y+(y*0.1);
+            this.viewScrollY = function (y) {
+                if(y<0)y=0;
+                _this.current.parentNode.style.top=-y+"px";
+                _this.current.parentNode.style.left=0+"px";
+                //view.scrollTop = view.scrollTop + y+(y*0.1);
 
             }
-            this.viewScrollX = function (view, x) {
-
-                view.scrollLeft = view.scrollLeft + x+(x*0.1);
+            this.viewScrollX = function (x) {
+                if(x<0)x=0;
+                _this.current.parentNode.style.left=-x+"px";
+                _this.current.parentNode.style.top=0+"px";
+                //view.scrollLeft = view.scrollLeft + x+(x*0.1);
             }
 
             
@@ -276,59 +280,31 @@ function fireKeyEvent(el, evtType, keyCode) {
                 }
                 return scrollTop;
             }
-            this.scroll = function (scrollId) {
-
-
-                if (!_this.current) return;
-                if (!_this.current.getAttribute("data-scroll")) return;
-                var scrollId = scrollId ? scrollId : _this.current.getAttribute("data-scroll");
-
-
-                if (scrollId) {
-                    var view = document.getElementById(scrollId);
-
-                    if ( _this.current.getBoundingClientRect().top-view.getBoundingClientRect().top<0) {
-                        
-                        _this.viewScrollY(view, _this.current.getBoundingClientRect().top-view.getBoundingClientRect().top  );
-
-                    }else if(_this.current.getBoundingClientRect().bottom-view.getBoundingClientRect().bottom>0){
-                        _this.viewScrollY(view, _this.current.getBoundingClientRect().bottom-view.getBoundingClientRect().bottom  );
+            this.scroll = function () {
+                var view=_this.current.parentNode.parentNode;
+                var direction = view.getAttribute("data-scroll-direction");
+                if(!direction) return;
+                  view.style.position="relative";
+                  _this.current.parentNode.style.position="absolute";
+                if(direction=="x"){
+                    _this.current.parentNode.style.width= (_this.hotbtn.length*_this.current.clientWidth*2)+"px";
+                  if ( _this.current.getBoundingClientRect().left-view.getBoundingClientRect().left-_this.current.getBoundingClientRect().width<0) {
+                        _this.viewScrollX(_this.current.getBoundingClientRect().left-view.getBoundingClientRect().left  );
                     }
-
-
-                    if (view.getAttribute("data-scroll-direction") == "x") {
-
-                        var col = view.children[0].children,
-                            _temp = 0;
-                        for (var i = 0; i < col.length; i++) {
-
-                            _temp = _temp + (col[i].offsetWidth * 1.08);
-
-
-                        }
-
-                        view.children[0].setAttribute("style", "width:" + _temp + "px");
-                    }
-
-                    
-
-                    if ( _this.current.getBoundingClientRect().left-view.getBoundingClientRect().left<0) {
-                        
-                        _this.viewScrollX(view, _this.current.getBoundingClientRect().left-view.getBoundingClientRect().left  );
-
-                    }else if(_this.current.getBoundingClientRect().right-view.getBoundingClientRect().right>0){
-                        _this.viewScrollX(view, _this.current.getBoundingClientRect().right-view.getBoundingClientRect().right  );
-                    }
-
-
+                    if(_this.current.getBoundingClientRect().left-view.getBoundingClientRect().left+_this.current.getBoundingClientRect().width>view.getBoundingClientRect().width){
+                        _this.viewScrollX(_this.current.getBoundingClientRect().left-(view.getBoundingClientRect().left)-_this.current.getBoundingClientRect().width);
+                    } 
                 }
-               if(_this.current.getBoundingClientRect().bottom>document.body.clientHeight||_this.current.getBoundingClientRect().top<0){
-                var y =_this.current.getBoundingClientRect().top- (document.body.clientHeight/2-_this.current.clientHeight/2);
-                //页面滚动
-                   window.scrollTo(0,y);
-               }
+                
+                if(direction=="y"){
+                    if ( _this.current.getBoundingClientRect().top-view.getBoundingClientRect().top-_this.current.getBoundingClientRect().height<0) {
+                        _this.viewScrollY(_this.current.getBoundingClientRect().top-view.getBoundingClientRect().top  );
+                    }
+                    if(_this.current.getBoundingClientRect().top-view.getBoundingClientRect().top+_this.current.getBoundingClientRect().height>view.getBoundingClientRect().height){
+                        _this.viewScrollY(_this.current.getBoundingClientRect().top-view.getBoundingClientRect().top-_this.current.getBoundingClientRect().height);
+                    }
+                }
                
-
 
             }
             
@@ -409,7 +385,7 @@ function fireKeyEvent(el, evtType, keyCode) {
                     {
                         var line = rules[_this.className]["line"];
                     }else{
-                        var line=1;
+                        var line=_this.hotbtn.length;
                     }
                    line=parseInt(line);
                    if (rules && typeof rules[_this.className] == "object" && typeof rules[_this.className][_this.currentIndex]!="undefined"&& typeof rules[_this.className][_this.currentIndex][index]!="undefined") {
@@ -470,12 +446,12 @@ function fireKeyEvent(el, evtType, keyCode) {
                     _this.currentIndex = _this.currentIndex;
                     _this.className = _this.className;
                     
-                    if((typeof init.rules[_this.className]["onPress"]) == "function")
+                    if(init.rules[_this.className]&&(typeof init.rules[_this.className]["onPress"]) == "function")
                     init.rules[_this.className]["onPress"].call(_this);
                     else _this.onPress.call(_this);
                     if (e.keyCode == btnEnter){
                         
-                        if((typeof init.rules[_this.className]["onEnterPress"]) == "function")
+                        if(init.rules[_this.className]&&(typeof init.rules[_this.className]["onEnterPress"]) == "function")
                         init.rules[_this.className]["onEnterPress"].call(_this);
                         else _this.onEnterPress.call(_this);
                     }
