@@ -245,17 +245,32 @@ function fireKeyEvent(el, evtType, keyCode) {
                
             }
             this.viewScrollY = function (y) {
-                if(y<0)y=0;
-                _this.current.parentNode.style.top=-y+"px";
-                _this.current.parentNode.style.left=0+"px";
-                //view.scrollTop = view.scrollTop + y+(y*0.1);
+                var view = _this.current.parentNode.parentNode;
+                var sumtop=view.getAttribute("data-scroll-y")? parseInt(view.getAttribute("data-scroll-y")):0;
+                    var s=sumtop+y+view.clientHeight/2- Math.ceil(_this.current.clientHeight/2);
+                   
+                    if(s>0)s=0;
+                    if(s<=sumtop&&_this.hotbtn[_this.hotbtn.length-1].getBoundingClientRect().bottom<view.getBoundingClientRect().bottom){
+                       // 移动到中间 当尾部右边界小于视窗的右边距 
+                       s=sumtop;
+                     }
+                      view.setAttribute("data-scroll-y",s);
+                    _this.current.parentNode.style.top=s+"px";
 
             }
             this.viewScrollX = function (x) {
-                if(x<0)x=0;
-                _this.current.parentNode.style.left=-x+"px";
-                _this.current.parentNode.style.top=0+"px";
-                //view.scrollLeft = view.scrollLeft + x+(x*0.1);
+                var view = _this.current.parentNode.parentNode;
+                var sumleft=view.getAttribute("data-scroll-x")? parseInt(view.getAttribute("data-scroll-x")):0;
+                
+                    var s=sumleft+x+view.clientWidth/2- Math.ceil(_this.current.clientWidth/2);
+                     if(s>0)s=0;
+                     if(s<=sumleft&&_this.hotbtn[_this.hotbtn.length-1].getBoundingClientRect().right<view.getBoundingClientRect().right){
+                       // 移动到中间 当尾部右边界小于视窗的右边距 
+                       s=sumleft;
+                     }
+                      view.setAttribute("data-scroll-x",s);  
+                    _this.current.parentNode.style.left=s+"px";
+                    //view.scrollLeft = view.scrollLeft + x+(x*0.1);
             }
 
             
@@ -280,29 +295,35 @@ function fireKeyEvent(el, evtType, keyCode) {
                 }
                 return scrollTop;
             }
+
             this.scroll = function () {
                 var view=_this.current.parentNode.parentNode;
                 var direction = view.getAttribute("data-scroll-direction");
                 if(!direction) return;
                   view.style.position="relative";
                   _this.current.parentNode.style.position="absolute";
+
+                 var sumleft=view.getAttribute("data-scroll-x")? parseInt(view.getAttribute("data-scroll-x")):0;
                 if(direction=="x"){
-                    _this.current.parentNode.style.width= (_this.hotbtn.length*_this.current.clientWidth*2)+"px";
-                  if ( _this.current.getBoundingClientRect().left-view.getBoundingClientRect().left-_this.current.getBoundingClientRect().width<0) {
-                        _this.viewScrollX(_this.current.getBoundingClientRect().left-view.getBoundingClientRect().left  );
-                    }
-                    if(_this.current.getBoundingClientRect().left-view.getBoundingClientRect().left+_this.current.getBoundingClientRect().width>view.getBoundingClientRect().width){
-                        _this.viewScrollX(_this.current.getBoundingClientRect().left-(view.getBoundingClientRect().left)-_this.current.getBoundingClientRect().width);
-                    } 
+                   
+                 _this.current.parentNode.style.width=_this.hotbtn.length*_this.current.clientWidth*2+"px";
+                 var scroll_left= view.getBoundingClientRect().left-_this.current.getBoundingClientRect().left;
+                     
+               
+                        _this.viewScrollX(scroll_left);
+                   
+                     
                 }
                 
+                 var sumleft=view.getAttribute("data-scroll-y")? parseInt(view.getAttribute("data-scroll-y")):0;
                 if(direction=="y"){
-                    if ( _this.current.getBoundingClientRect().top-view.getBoundingClientRect().top-_this.current.getBoundingClientRect().height<0) {
-                        _this.viewScrollY(_this.current.getBoundingClientRect().top-view.getBoundingClientRect().top  );
-                    }
-                    if(_this.current.getBoundingClientRect().top-view.getBoundingClientRect().top+_this.current.getBoundingClientRect().height>view.getBoundingClientRect().height){
-                        _this.viewScrollY(_this.current.getBoundingClientRect().top-view.getBoundingClientRect().top-_this.current.getBoundingClientRect().height);
-                    }
+                   
+                 var scroll_top= view.getBoundingClientRect().top-_this.current.getBoundingClientRect().top;
+                     
+               
+                        _this.viewScrollY(scroll_top);
+                   
+                     
                 }
                
 
