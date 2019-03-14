@@ -297,6 +297,12 @@ function fireKeyEvent(el, evtType, keyCode) {
             }
 
             this.scroll = function () {
+                
+                  if(_this.current.getBoundingClientRect().bottom>document.body.clientHeight||_this.current.getBoundingClientRect().top<0){
+                    var y =_this.current.getBoundingClientRect().top- (document.body.clientHeight/2-_this.current.clientHeight/2);
+                    //页面滚动
+                       window.scrollTo(0,y);
+                   }
                 var view=_this.current.parentNode.parentNode;
                 var direction = view.getAttribute("data-scroll-direction");
                 if(!direction) return;
@@ -325,11 +331,7 @@ function fireKeyEvent(el, evtType, keyCode) {
                    
                      
                 }
-                 if(_this.current.getBoundingClientRect().bottom>document.body.clientHeight||_this.current.getBoundingClientRect().top<0){
-                var y =_this.current.getBoundingClientRect().top- (document.body.clientHeight/2-_this.current.clientHeight/2);
-                //页面滚动
-                   window.scrollTo(0,y);
-               }
+
                
 
             }
