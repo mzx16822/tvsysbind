@@ -308,7 +308,7 @@ function fireKeyEvent(el, evtType, keyCode) {
                 if(!direction) return;
                   view.style.position="relative";
                   _this.current.parentNode.style.position="absolute";
-
+                  _this.current.parentNode.style.transition="left 0.3s ease-out 0s, top 0.3s ease-out 0s";
                  var sumleft=view.getAttribute("data-scroll-x")? parseInt(view.getAttribute("data-scroll-x")):0;
                 if(direction=="x"){
                    
