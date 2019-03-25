@@ -259,10 +259,10 @@ function fireKeyEvent(el, evtType, keyCode) {
                     view.setAttribute("data-scroll-maxTop", maxTop);  
                 }
                
-                if(  top <sumtop &&top<maxTop) {
+                if(  top <sumtop &&top<-maxTop) {
                      
                     // 移动到中间 当尾部右边界小于视窗的右边距 
-                    top = -maxTop;
+                     top = -maxTop;
                 }
                 view.setAttribute("data-scroll-y", top);
                 _this.current.parentNode.style.top = top + "px";
@@ -280,8 +280,7 @@ function fireKeyEvent(el, evtType, keyCode) {
                     view.setAttribute("data-scroll-maxLeft", maxLeft);  
                 }
                
-                if(  left <sumleft &&left<maxLeft) {
-                     
+                if(  left <sumleft &&left<-maxLeft) {
                     // 移动到中间 当尾部右边界小于视窗的右边距 
                     left = -maxLeft;
                 }
