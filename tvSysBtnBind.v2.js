@@ -104,6 +104,7 @@ function fireKeyEvent(el, evtType, keyCode) {
                 btnDown = init.btnDown ? init.btnDown : 40,
                 btnEnter = init.btnEnter ? init.btnEnter : 13,
                 history = init.history ? init.history : true,
+                isFloatLast=init.isFloatLast?init.isFloatLast:false,
                 currentClass = init.currentClass ? init.currentClass : "current",
                 doc = id ? document.getElementById(id) : document.body,
                 effect = init.effect ? init.effect : "slide1",
@@ -120,7 +121,10 @@ function fireKeyEvent(el, evtType, keyCode) {
             if(!window.focusobj) window.focusobj = document.createElement("span");
             (typeof init.onLoad) == "function" ? init.onLoad: init.onLoad = function () {};
             this.onLoad = function () {
-
+                focusobj.innerHTML = '<div class="cssbk"><b class="lt"></b><b class="t"></b><b class="rt"></b><b class="r"></b><b class="rb"></b><b class="b"></b><b class="lb"></b> <b class="l"></b></div>';
+                focusobj.classList.add("focusobj");
+                focusobj.classList.add("current");
+                focusobj.style.display="none";
                 _this.reLoad();
                 this.sourceClassName = _this.className;
                 this.sourceLength = element.length;
@@ -131,10 +135,8 @@ function fireKeyEvent(el, evtType, keyCode) {
                 _this.currentIndex = currentIndex;
                 _this.target = doc;
                 init.onLoad.call(_this);
-                focusobj.innerHTML = '<div class="cssbk"><b class="lt"></b><b class="t"></b><b class="rt"></b><b class="r"></b><b class="rb"></b><b class="b"></b><b class="lb"></b> <b class="l"></b></div>';
-                focusobj.classList.add("focusobj");
-                focusobj.classList.add("current");
                 this.target.appendChild(focusobj);
+                
             }
 
             this.reSetClass = function (item, index) {
@@ -376,9 +378,11 @@ function fireKeyEvent(el, evtType, keyCode) {
                 if(effect) {
                     focusobj.setAttribute("style", "  position: fixed; z-index: 19;width:" + (element[index].getBoundingClientRect().width) + "px ;height:" + (element[index].getBoundingClientRect().height) + "px; left:" + element[index].getBoundingClientRect().left + "px;top:" + element[index].getBoundingClientRect().top + "px;");
                     focusobj.setAttribute("class", "focusobj current " + effect);
+                    focusobj.style.display="list-item";
                 } else {
-                    focusobj.setAttribute("class", "hide ");
                     focusobj.setAttribute("style", "");
+                    focusobj.style.display="none";
+                    
                 }
 
 
@@ -462,6 +466,10 @@ function fireKeyEvent(el, evtType, keyCode) {
                         if(_this.hotbtn.length - line > _this.currentIndex) //下边沿
                             _this.currentIndex = jump ? _this.currentIndex + jump : _this.currentIndex + line;
                         else if(obj && typeof obj["down"] != "undefined") _this.reSetClass(obj["down"][0], obj["down"][1]);
+                        else if(_this.currentIndex+line>_this.hotbtn.length-1&&isFloatLast) {
+                            _this.currentIndex=_this.currentIndex+line;
+                            self.overIndex();
+                        }
                     }
                 }
             }
