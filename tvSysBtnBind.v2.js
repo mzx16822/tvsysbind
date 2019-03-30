@@ -466,7 +466,7 @@ function fireKeyEvent(el, evtType, keyCode) {
                         if(_this.hotbtn.length - line > _this.currentIndex) //下边沿
                             _this.currentIndex = jump ? _this.currentIndex + jump : _this.currentIndex + line;
                         else if(obj && typeof obj["down"] != "undefined") _this.reSetClass(obj["down"][0], obj["down"][1]);
-                        else if(_this.currentIndex+line>_this.hotbtn.length-1&&isFloatLast) {
+                        else if(_this.currentIndex+line>_this.hotbtn.length-1&&_this.currentIndex+line<=(line-_this.hotbtn.length%line)+_this.hotbtn.length-1&&_this.hotbtn.length%line!=0&&isFloatLast) {
                             _this.currentIndex=_this.currentIndex+line;
                             self.overIndex();
                         }
