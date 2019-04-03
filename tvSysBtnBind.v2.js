@@ -105,6 +105,7 @@ function fireKeyEvent(el, evtType, keyCode) {
                 btnEnter = init.btnEnter ? init.btnEnter : 13,
                 history = init.history ? init.history : true,
                 isFloatLast=init.isFloatLast?init.isFloatLast:false,
+                isCentered=init.isCentered?init.isCentered:false,
                 currentClass = init.currentClass ? init.currentClass : "current",
                 doc = id ? document.getElementById(id) : document.body,
                 effect = init.effect ? init.effect : "slide1",
@@ -276,8 +277,9 @@ function fireKeyEvent(el, evtType, keyCode) {
                 var sumleft = view.getAttribute("data-scroll-x") ? parseInt(view.getAttribute("data-scroll-x")) : 0;
 
                 var left = sumleft + x + view.clientWidth / 2 - Math.ceil(_this.current.clientWidth / 2);
-                if(left > 0) left = 0;
-                if(view.getAttribute("data-scroll-maxLeft")==null){
+                
+                if(!isCentered&&left > 0) left = 0;
+                if(!isCentered&&view.getAttribute("data-scroll-maxLeft")==null){
                     maxLeft= _this.hotbtn[_this.hotbtn.length - 1].getBoundingClientRect().right-view.getBoundingClientRect().right;
                     view.setAttribute("data-scroll-maxLeft", maxLeft);  
                 }
@@ -449,7 +451,9 @@ function fireKeyEvent(el, evtType, keyCode) {
                 } else {
                     var jump = element[_this.currentIndex].getAttribute("data-" + direction);
                     jump = parseInt(jump);
-                    var obj = rules[_this.className];
+                    var obj={};
+                    if(rules)
+                      obj = rules[_this.className];
                     if(direction == "up") {
                         if(_this.currentIndex > line - 1) //上边沿
                             _this.currentIndex = jump ? _this.currentIndex - jump : _this.currentIndex - line;
@@ -496,7 +500,7 @@ function fireKeyEvent(el, evtType, keyCode) {
                 _this.currentIndex = _this.currentIndex;
                 _this.className = _this.className;
 
-                if(init.rules[_this.className] && (typeof init.rules[_this.className]["onPress"]) == "function")
+                if(init.rules&&init.rules[_this.className] && (typeof init.rules[_this.className]["onPress"]) == "function")
                     init.rules[_this.className]["onPress"].call(_this);
                 else _this.onPress.call(_this);
                 if(e.keyCode == btnEnter) {
