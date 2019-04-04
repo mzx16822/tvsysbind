@@ -118,6 +118,8 @@ function fireKeyEvent(el, evtType, keyCode) {
             var _tempElem;
             this.currentIndex = parseInt(currentIndex);
             this.defaultIndex = parseInt(currentIndex);
+            this.currentClass = currentClass;
+            
             this.historyFocus = {};
             if(!window.focusobj) window.focusobj = document.createElement("span");
             (typeof init.onLoad) == "function" ? init.onLoad: init.onLoad = function () {};
@@ -140,18 +142,21 @@ function fireKeyEvent(el, evtType, keyCode) {
                 
             }
 
-            this.reSetClass = function (item, index) {
+            this.reSetClass = function (item, index,curClass) {
                 //新组别 用于弹窗 不同组热键 API
                 if(history) //记录开关
                     _this.historyFocus[_this.className] = _this.currentIndex; //记录上一组焦点
                 index = index ? index : 0;
-                
+                if(curClass){
+                    _this.currentClass=curClass;
+                }
                 if(_this.target.getElementsByClassName(item).length>0){
-                    _this.prev.classList.remove(currentClass);
+                    _this.prev.classList.remove(_this.currentClass);
                     _this.className = item;
                     _this.prevIndex = _this.currentIndex = _this.historyFocus[item] ? _this.historyFocus[item] : index;
                     _this.reLoad();  
                 }
+                
                 
             }
 
@@ -366,13 +371,13 @@ function fireKeyEvent(el, evtType, keyCode) {
                 }
 
                 if(element[index])
-                    element[index].classList.add(currentClass);
+                    element[index].classList.add(_this.currentClass);
                 else return;
                 //如果元素不存在 不进行渲染 待重载
                 for(var i = 0; i < element.length; i++) {
-                    if(i != index && element[i].classList.contains(currentClass)) {
+                    if(i != index && element[i].classList.contains(_this.currentClass)) {
 
-                        element[i].classList.remove(currentClass);
+                        element[i].classList.remove(_this.currentClass);
                     }
                 }
                 _this.scroll(); //渲染的之前先复位
@@ -457,19 +462,19 @@ function fireKeyEvent(el, evtType, keyCode) {
                     if(direction == "up") {
                         if(_this.currentIndex > line - 1) //上边沿
                             _this.currentIndex = jump ? _this.currentIndex - jump : _this.currentIndex - line;
-                        else if(obj && typeof obj["up"] != "undefined") _this.reSetClass(obj[direction][0], obj["up"][1]);
+                        else if(obj && typeof obj["up"] != "undefined") _this.reSetClass(obj[direction][0], obj["up"][1],obj["up"][2]);
                     } else if(direction == "left") {
                         if((_this.currentIndex) % line != 0) //左边
                             _this.currentIndex = jump ? _this.currentIndex - jump : _this.currentIndex - 1;
-                        else if(obj && typeof obj["left"] != "undefined") _this.reSetClass(obj["left"][0], obj["left"][1]);
+                        else if(obj && typeof obj["left"] != "undefined") _this.reSetClass(obj["left"][0], obj["left"][1],obj["left"][2]);
                     } else if(direction == "right") {
                         if((_this.currentIndex + 1) % line != 0) //右边
                             _this.currentIndex = jump ? _this.currentIndex + jump : _this.currentIndex + 1;
-                        else if(obj && typeof obj["right"] != "undefined") _this.reSetClass(obj["right"][0], obj["right"][1]);
+                        else if(obj && typeof obj["right"] != "undefined") _this.reSetClass(obj["right"][0], obj["right"][1],obj["right"][2]);
                     } else if(direction == "down") {
                         if(_this.hotbtn.length - line > _this.currentIndex) //下边沿
                             _this.currentIndex = jump ? _this.currentIndex + jump : _this.currentIndex + line;
-                        else if(obj && typeof obj["down"] != "undefined") _this.reSetClass(obj["down"][0], obj["down"][1]);
+                        else if(obj && typeof obj["down"] != "undefined") _this.reSetClass(obj["down"][0], obj["down"][1],obj["down"][2]);
                         else if(_this.currentIndex+line>_this.hotbtn.length-1&&_this.currentIndex+line<=(line-_this.hotbtn.length%line)+_this.hotbtn.length-1&&_this.hotbtn.length%line!=0&&isFloatLast) {
                             _this.currentIndex=_this.currentIndex+line;
                             self.overIndex();
