@@ -151,6 +151,7 @@ function fireKeyEvent(el, evtType, keyCode) {
                     _this.currentClass=curClass;
                 }
                 if(_this.target.getElementsByClassName(item).length>0){
+                    if(_this.prev) //无需有默认组 也能设置新组
                     _this.prev.classList.remove(_this.currentClass);
                     _this.className = item;
                     _this.prevIndex = _this.currentIndex = _this.historyFocus[item] ? _this.historyFocus[item] : index;
