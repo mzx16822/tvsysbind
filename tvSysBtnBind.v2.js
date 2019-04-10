@@ -123,6 +123,7 @@ function fireKeyEvent(el, evtType, keyCode) {
             this.historyFocus = {};
             if(!window.focusobj) window.focusobj = document.createElement("span");
             (typeof init.onLoad) == "function" ? init.onLoad: init.onLoad = function () {};
+            (typeof init.onBack) == "function" ? init.onLoad: init.onBack = function () {};
             this.onLoad = function () {
                 focusobj.innerHTML = '<div class="cssbk"><b class="lt"></b><b class="t"></b><b class="rt"></b><b class="r"></b><b class="rb"></b><b class="b"></b><b class="lb"></b> <b class="l"></b></div>';
                 focusobj.classList.add("focusobj");
@@ -147,6 +148,7 @@ function fireKeyEvent(el, evtType, keyCode) {
                 if(history) //记录开关
                     _this.historyFocus[_this.className] = _this.currentIndex; //记录上一组焦点
                 index = index ? index : 0;
+                _this.prevCurrentClass=_this.currentClass;
                 if(curClass){
                     _this.currentClass=curClass;
                 }
@@ -219,8 +221,8 @@ function fireKeyEvent(el, evtType, keyCode) {
                     }
                 }
                 isSet = false;
-                _this.prev = element[_this.currentIndex];
-                _this.prevIndex = _this.currentIndex;
+                // _this.prev = element[_this.currentIndex];
+                // _this.prevIndex = _this.currentIndex;
                 _this.current = element[_this.currentIndex];
                 _this.currentIndex = _this.currentIndex;
 
@@ -310,6 +312,12 @@ function fireKeyEvent(el, evtType, keyCode) {
 
 
             }
+            this.onBack = function () {
+
+                init.onBack.call(_this);
+
+
+            }
 
             self.getScrollTop = function () {
                 var scrollTop = 0;
@@ -370,7 +378,15 @@ function fireKeyEvent(el, evtType, keyCode) {
                     _this.sourceLength = element.length;
 
                 }
+                if(_this.prevCurrentClass){
+                  var ele=_this.target.getElementsByClassName(_this.prevCurrentClass);
+                     for(var i = 0; i < ele.length; i++) {
+                        if(ele[i].classList.contains(_this.prevCurrentClass)) {
 
+                            ele[i].classList.remove(_this.prevCurrentClass);
+                        }
+                    }  
+                }
                 if(element[index])
                     element[index].classList.add(_this.currentClass);
                 else return;
@@ -381,6 +397,8 @@ function fireKeyEvent(el, evtType, keyCode) {
                         element[i].classList.remove(_this.currentClass);
                     }
                 }
+                
+                
                 _this.scroll(); //渲染的之前先复位
                 var effect = element[index].getAttribute("data-effect");
                 if(effect) {
@@ -514,6 +532,12 @@ function fireKeyEvent(el, evtType, keyCode) {
                     if(init.rules[_this.className] && (typeof init.rules[_this.className]["onEnterPress"]) == "function")
                         init.rules[_this.className]["onEnterPress"].call(_this);
                     else _this.onEnterPress.call(_this);
+                }
+                if(e.keyCode == 8||e.keyCode == 27) {
+
+                    if(init.rules[_this.className] && (typeof init.rules[_this.className]["onBack"]) == "function")
+                        init.rules[_this.className]["onBack"].call(_this);
+                    else _this.onBack.call(_this);
                 }
 
                 _self.classDo(_this.currentIndex);
