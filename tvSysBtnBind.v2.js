@@ -110,7 +110,7 @@ function fireKeyEvent(el, evtType, keyCode) {
                 doc = id ? document.getElementById(id) : document.body,
                 effect = init.effect ? init.effect : "slide1",
                 element = new Array(),
-                rules = Object.prototype.toString.call(init.rules) == '[object Object]' ? init.rules : null,
+                rules = Object.prototype.toString.call(init.rules) == '[object Object]' ? init.rules : {},
                 direction = "y";
             _this.className = init.className ? init.className : "hotbutton";
             this.event = {};
@@ -524,19 +524,19 @@ function fireKeyEvent(el, evtType, keyCode) {
                 _this.currentIndex = _this.currentIndex;
                 _this.className = _this.className;
 
-                if(init.rules&&init.rules[_this.className] && (typeof init.rules[_this.className]["onPress"]) == "function")
+                if(rules&&rules[_this.className] && (typeof rules[_this.className]["onPress"]) == "function")
                     init.rules[_this.className]["onPress"].call(_this);
                 else _this.onPress.call(_this);
                 if(e.keyCode == btnEnter) {
 
-                    if(init.rules[_this.className] && (typeof init.rules[_this.className]["onEnterPress"]) == "function")
-                        init.rules[_this.className]["onEnterPress"].call(_this);
+                    if(rules[_this.className] && (typeof rules[_this.className]["onEnterPress"]) == "function")
+                        rules[_this.className]["onEnterPress"].call(_this);
                     else _this.onEnterPress.call(_this);
                 }
                 if(e.keyCode == 8||e.keyCode == 27) {
 
-                    if(init.rules[_this.className] && (typeof init.rules[_this.className]["onBack"]) == "function")
-                        init.rules[_this.className]["onBack"].call(_this);
+                    if(rules[_this.className] && (typeof rules[_this.className]["onBack"]) == "function")
+                        rules[_this.className]["onBack"].call(_this);
                     else _this.onBack.call(_this);
                 }
 
