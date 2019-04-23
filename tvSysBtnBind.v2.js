@@ -107,7 +107,7 @@ function fireKeyEvent(el, evtType, keyCode) {
                 isFloatLast=init.isFloatLast?init.isFloatLast:false,
                 isCentered=init.isCentered?init.isCentered:false,
                 currentClass = init.currentClass ? init.currentClass : "current",
-                doc = id ? document.getElementById(id) : document.body,
+               
                 effect = init.effect ? init.effect : "slide1",
                 element = new Array(),
                 rules = Object.prototype.toString.call(init.rules) == '[object Object]' ? init.rules : {},
@@ -129,17 +129,19 @@ function fireKeyEvent(el, evtType, keyCode) {
                 focusobj.classList.add("focusobj");
                 focusobj.classList.add("current");
                 focusobj.style.display="none";
+                _this.target= init.id ? document.getElementById(init.id) : document.body;
+                _this.defaultTarget=_this.target;
+                _this.currentId=init.id?init.id:"Jdoc";
                 _this.reLoad();
-                this.sourceClassName = _this.className;
-                this.sourceLength = element.length;
+                _this.sourceClassName = _this.className;
+                _this.sourceLength = element.length;
                 //element[currentIndex].classList.add(currentClass);
                 _this.prev = element[currentIndex];
                 _this.prevIndex = currentIndex;
                 _this.current = element[currentIndex];
                 _this.currentIndex = currentIndex;
-                _this.target = doc;
                 init.onLoad.call(_this);
-                this.target.appendChild(focusobj);
+                _this.target.appendChild(focusobj);
                 
             }
 
@@ -147,20 +149,46 @@ function fireKeyEvent(el, evtType, keyCode) {
                 //新组别 用于弹窗 不同组热键 API
                 if(history) //记录开关
                     _this.historyFocus[_this.className] = _this.currentIndex; //记录上一组焦点
-                index = index ? index : 0;
-                _this.prevCurrentClass=_this.currentClass;
+                    index = index ? index : 0;
+                    _this.prevCurrentClass=_this.currentClass;
                 if(curClass){
                     _this.currentClass=curClass;
                 }
+            var arr=item.split(">");
+                for (var  i = 0; i < arr.length; i++) {
+                    if(arr[i]=="")arr.splice(i);
+                }
+                for (var i = 0; i < arr.length; i++) {
+                    //组合元素选择器
+                    if(arr[i].indexOf("#")!=-1){
+                        if(document.getElementById(arr[i].replace("#","")))
+                        _this.target=document.getElementById(arr[i].replace("#","")); 
+                        _this.currentId=arr[i].replace("#","");     
+                    }
+                    if(arr[i].indexOf(".")!=-1){
+                      item = arr[i].replace(".","");  
+                    }
+                    if(arr[i].indexOf(".")==-1&&arr[i].indexOf("#")==-1){
+                      item = arr[i];  
+                    }
+                }
+             
                 if(_this.target.getElementsByClassName(item).length>0){
-                    if(_this.prev) //无需有默认组 也能设置新组
-                    _this.prev.classList.remove(_this.currentClass);
-                    _this.className = item;
-                    _this.prevIndex = _this.currentIndex = _this.historyFocus[item] ? _this.historyFocus[item] : index;
-                    _this.reLoad();  
+                    _self.newItem(item,index);
+                }else{
+                    _this.target=_this.defaultTarget; //如果上一个区域没有找到该元素 那么返回加载时候的区域
+                    if(_this.target.getElementsByClassName(item).length>0)
+                    _self.newItem(item,index);
                 }
                 
                 
+            }
+            self.newItem=function(item,index){
+                if(_this.prev) //无需有默认组 也能设置新组
+                    _this.prev.classList.remove(_this.currentClass);
+                    _this.className = item;
+                    _this.prevIndex = _this.currentIndex = _this.historyFocus[item] ? _this.historyFocus[item] : index;
+                    _this.reLoad(); 
             }
 
             self.readFn = function () {
@@ -190,11 +218,9 @@ function fireKeyEvent(el, evtType, keyCode) {
 
 
                 self.readFn();
-                if(doc != null) {
-
-                    element = doc.getElementsByClassName(_this.className);
-                    this.hotbtn = element;
-                }
+                element = _this.target.getElementsByClassName(_this.className);
+                this.hotbtn = element;
+             
                 if(element.length <= 0) return false;
 
                 if(_this.currentIndex || _this.currentIndex == 0) {
@@ -340,7 +366,7 @@ function fireKeyEvent(el, evtType, keyCode) {
                 if(!direction) return;
                 view.style.position = "relative";
                 _this.current.parentNode.style.position = "absolute";
-                _this.current.parentNode.style.transition = "left 0.324s ease-out 0s, top 0.324s ease-out 0s";
+                 _this.current.parentNode.style.transition = "left 0.324s ease-out 0s, top 0.324s ease-out 0s";
 
                 var sumleft = view.getAttribute("data-scroll-x") ? parseInt(view.getAttribute("data-scroll-x")) : 0;
                 if(direction == "x") {
@@ -365,7 +391,7 @@ function fireKeyEvent(el, evtType, keyCode) {
 
                 }
 
-
+                
 
             }
 
@@ -403,6 +429,7 @@ function fireKeyEvent(el, evtType, keyCode) {
                 var effect = element[index].getAttribute("data-effect");
                 if(effect) {
                     focusobj.setAttribute("style", "  position: fixed; z-index: 19;width:" + (element[index].getBoundingClientRect().width) + "px ;height:" + (element[index].getBoundingClientRect().height) + "px; left:" + element[index].getBoundingClientRect().left + "px;top:" + element[index].getBoundingClientRect().top + "px;");
+                   
                     focusobj.setAttribute("class", "focusobj current " + effect);
                     focusobj.style.display="list-item";
                 } else {
@@ -454,46 +481,52 @@ function fireKeyEvent(el, evtType, keyCode) {
             }
 
             self.ruleFn = function (index, direction) {
-                if(rules && typeof rules[_this.className] == "object" && typeof rules[_this.className]["line"] != "undefined") {
-                    var line = rules[_this.className]["line"];
+                var obj={};
+                if(rules) {
+                    obj = rules["#"+_this.currentId+">."+_this.className];
+                    if(typeof obj == "undefined")
+                        obj = rules[_this.className];
+                }
+                if(obj && typeof obj == "object" && typeof obj["line"] != "undefined") {
+                    var line = obj["line"];
                 } else {
                     var line = _this.hotbtn.length;
                 }
                 line = parseInt(line);
-                if(rules && typeof rules[_this.className] == "object" && typeof rules[_this.className][_this.currentIndex] != "undefined" && typeof rules[_this.className][_this.currentIndex][index] != "undefined") {
-                    var objRules = rules[_this.className][_this.currentIndex];
+                if(obj && typeof obj == "object" && typeof obj[_this.currentIndex] != "undefined" && typeof obj[_this.currentIndex][index] != "undefined") {
+                    var objRules = obj[_this.currentIndex];
                     if(self.isNumber(objRules[index])) {
                         _this.currentIndex = parseInt(_this.currentIndex) + parseInt(objRules[index]);
                     } else if(Array.isArray(objRules[index])) {
                         //_this.currentIndex = _this.currentIndex + parseInt(objRules[index][1]); 
                         _this.reSetClass(objRules[index][0], objRules[index][1]);
-                    } else if(typeof rules[_this.className]["line"] != "undefined") {
-
+                    } else if(typeof obj["line"] != "undefined") {
                         _this.currentIndex = _this.currentIndex + line;
                     }
 
                 } else {
                     var jump = element[_this.currentIndex].getAttribute("data-" + direction);
                     jump = parseInt(jump);
-                    var obj={};
-                    if(rules)
-                      obj = rules[_this.className];
                     if(direction == "up") {
                         if(_this.currentIndex > line - 1) //上边沿
                             _this.currentIndex = jump ? _this.currentIndex - jump : _this.currentIndex - line;
-                        else if(obj && typeof obj["up"] != "undefined") _this.reSetClass(obj[direction][0], obj["up"][1],obj["up"][2]);
+                        else if(obj && typeof obj["up"] == "object") _this.reSetClass(obj[direction][0], obj["up"][1],obj["up"][2],obj["up"][3]);
+                        else if(obj && typeof obj["up"] == "function")obj["up"].call(_this) ;
                     } else if(direction == "left") {
                         if((_this.currentIndex) % line != 0) //左边
                             _this.currentIndex = jump ? _this.currentIndex - jump : _this.currentIndex - 1;
-                        else if(obj && typeof obj["left"] != "undefined") _this.reSetClass(obj["left"][0], obj["left"][1],obj["left"][2]);
+                        else if(obj && typeof obj["left"] == "object") _this.reSetClass(obj["left"][0], obj["left"][1],obj["left"][2],obj["left"][3]);
+                        else if(obj && typeof obj["left"] == "function")obj["left"].call(_this) ;
                     } else if(direction == "right") {
                         if((_this.currentIndex + 1) % line != 0) //右边
                             _this.currentIndex = jump ? _this.currentIndex + jump : _this.currentIndex + 1;
-                        else if(obj && typeof obj["right"] != "undefined") _this.reSetClass(obj["right"][0], obj["right"][1],obj["right"][2]);
+                        else if(obj && typeof obj["right"] == "object") _this.reSetClass(obj["right"][0], obj["right"][1],obj["right"][2],obj["right"][3]);
+                        else if(obj && typeof obj["right"] == "function")obj["right"].call(_this) ;
                     } else if(direction == "down") {
                         if(_this.hotbtn.length - line > _this.currentIndex) //下边沿
                             _this.currentIndex = jump ? _this.currentIndex + jump : _this.currentIndex + line;
-                        else if(obj && typeof obj["down"] != "undefined") _this.reSetClass(obj["down"][0], obj["down"][1],obj["down"][2]);
+                        else if(obj && typeof obj["down"] == "object") _this.reSetClass(obj["down"][0], obj["down"][1],obj["down"][2],obj["down"][3]);
+                        else if(obj && typeof obj["down"] == "function")obj["down"].call(_this) ;
                         else if(_this.currentIndex+line>_this.hotbtn.length-1&&_this.currentIndex+line<=(line-_this.hotbtn.length%line)+_this.hotbtn.length-1&&_this.hotbtn.length%line!=0&&isFloatLast) {
                             _this.currentIndex=_this.currentIndex+line;
                             self.overIndex();
@@ -523,7 +556,11 @@ function fireKeyEvent(el, evtType, keyCode) {
                 _this.current = element[_this.currentIndex];
                 _this.currentIndex = _this.currentIndex;
                 _this.className = _this.className;
-
+                if(e.keyCode == 8||e.keyCode == 27) {
+                    if(rules[_this.className] && (typeof rules[_this.className]["onBack"]) == "function")
+                        rules[_this.className]["onBack"].call(_this);
+                    else _this.onBack.call(_this);
+                }
                 if(rules&&rules[_this.className] && (typeof rules[_this.className]["onPress"]) == "function")
                     init.rules[_this.className]["onPress"].call(_this);
                 else _this.onPress.call(_this);
@@ -533,12 +570,7 @@ function fireKeyEvent(el, evtType, keyCode) {
                         rules[_this.className]["onEnterPress"].call(_this);
                     else _this.onEnterPress.call(_this);
                 }
-                if(e.keyCode == 8||e.keyCode == 27) {
-
-                    if(rules[_this.className] && (typeof rules[_this.className]["onBack"]) == "function")
-                        rules[_this.className]["onBack"].call(_this);
-                    else _this.onBack.call(_this);
-                }
+                
 
                 _self.classDo(_this.currentIndex);
                 keydefault(e);
