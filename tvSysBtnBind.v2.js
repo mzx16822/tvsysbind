@@ -96,16 +96,16 @@ function fireKeyEvent(el, evtType, keyCode) {
             var _this = this,
                 _self = self;
             var id = init.id ? init.id : null,
-                keyRemoveDefault = init.keyRemoveDefault ? true : false,
+                keyRemoveDefault = typeof init.keyRemoveDefault =="undefined" ? false : init.keyRemoveDefault,
                 currentIndex = init.currentIndex ? parseInt(init.currentIndex) : 0,
                 btnLeft = init.btnLeft ? init.btnLeft : 37,
                 btnUp = init.btnUp ? init.btnUp : 38,
                 btnRight = init.btnRight ? init.btnRight : 39,
                 btnDown = init.btnDown ? init.btnDown : 40,
                 btnEnter = init.btnEnter ? init.btnEnter : 13,
-                history = init.history ? init.history : true,
-                isFloatLast=init.isFloatLast?init.isFloatLast:false,
-                isCentered=init.isCentered?init.isCentered:false,
+                history =  typeof init.history =="undefined" ? true : init.history,
+                isFloatLast= typeof init.isFloatLast =="undefined" ? false : init.isFloatLast,
+                isCentered= typeof init.isCentered =="undefined" ? false : init.isCentered,
                 currentClass = init.currentClass ? init.currentClass : "current",
                
                 effect = init.effect ? init.effect : "slide1",
@@ -311,17 +311,19 @@ function fireKeyEvent(el, evtType, keyCode) {
                 var sumleft = view.getAttribute("data-scroll-x") ? parseInt(view.getAttribute("data-scroll-x")) : 0;
 
                 var left = sumleft + x + view.clientWidth / 2 - Math.ceil(_this.current.clientWidth / 2);
+                if(isCentered){
+                   if(left > 0) left = 0;
+                    if(view.getAttribute("data-scroll-maxLeft")==null){
+                        maxLeft= _this.hotbtn[_this.hotbtn.length - 1].getBoundingClientRect().right-view.getBoundingClientRect().right;
+                        view.setAttribute("data-scroll-maxLeft", maxLeft);  
+                    }
+                   
+                    if(  left <sumleft &&left<-maxLeft) {
+                        // 移动到中间 当尾部右边界小于视窗的右边距 
+                        left = -maxLeft;
+                    } 
+                }
                 
-                if(!isCentered&&left > 0) left = 0;
-                if(!isCentered&&view.getAttribute("data-scroll-maxLeft")==null){
-                    maxLeft= _this.hotbtn[_this.hotbtn.length - 1].getBoundingClientRect().right-view.getBoundingClientRect().right;
-                    view.setAttribute("data-scroll-maxLeft", maxLeft);  
-                }
-               
-                if(  left <sumleft &&left<-maxLeft) {
-                    // 移动到中间 当尾部右边界小于视窗的右边距 
-                    left = -maxLeft;
-                }
                 view.setAttribute("data-scroll-x", left);
                 _this.current.parentNode.style.left = left + "px";
             }
