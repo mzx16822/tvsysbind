@@ -128,8 +128,8 @@ function fireKeyEvent(el, evtType, keyCode) {
                 _this.prevIndex = currentIndex;
                 _this.current = element[currentIndex];
                 _this.currentIndex = currentIndex;
+                _this.target.appendChild(focusobj);
                 init.onLoad.call(_this);
-                _this.target.appendChild(focusobj)
             }
             this.reSetClass = function(item, index, curClass) {
                 if (history) _this.historyFocus[_this.currentId+_this.className] = _this.currentIndex;
@@ -209,6 +209,7 @@ function fireKeyEvent(el, evtType, keyCode) {
                 for (var i = 0; i < this.hotbtn.length; i++) {
                     this.hotbtn[i].setAttribute("data-id", i)
                 }
+
             }
             function keydefault(e) {
                 try {
@@ -443,7 +444,6 @@ function fireKeyEvent(el, evtType, keyCode) {
                 _self.classDo(_this.currentIndex);
                 keydefault(e)
             }
-            this.onLoad()
         }
     window.tvSysBtnBind = tvSysBtnBind
 })(window)
