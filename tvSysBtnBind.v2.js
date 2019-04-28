@@ -209,7 +209,6 @@ function fireKeyEvent(el, evtType, keyCode) {
                 for (var i = 0; i < this.hotbtn.length; i++) {
                     this.hotbtn[i].setAttribute("data-id", i)
                 }
-
             }
             function keydefault(e) {
                 try {
@@ -444,6 +443,7 @@ function fireKeyEvent(el, evtType, keyCode) {
                 _self.classDo(_this.currentIndex);
                 keydefault(e)
             }
+            this.onLoad();
         }
     window.tvSysBtnBind = tvSysBtnBind
 })(window)
