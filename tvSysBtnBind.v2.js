@@ -228,13 +228,6 @@ function fireKeyEvent(el, evtType, keyCode) {
                 var sumtop = view.getAttribute("data-scroll-y") ? parseInt(view.getAttribute("data-scroll-y")) : 0;
                 var top = sumtop + y + view.clientHeight / 2 - Math.ceil(_this.current.clientHeight / 2);
                 if (top > 0) top = 0;
-                if (view.getAttribute("data-scroll-maxTop") == null) {
-                    maxTop = _this.hotbtn[_this.hotbtn.length - 1].getBoundingClientRect().bottom - view.getBoundingClientRect().bottom;
-                    view.setAttribute("data-scroll-maxTop", maxTop)
-                }
-                if (top < sumtop && top < -maxTop) {
-                    top = -maxTop
-                }
                 view.setAttribute("data-scroll-y", top);
                 _this.current.parentNode.style.top = top + "px"
             }
@@ -243,8 +236,8 @@ function fireKeyEvent(el, evtType, keyCode) {
                 var view = _this.current.parentNode.parentNode;
                 var sumleft = view.getAttribute("data-scroll-x") ? parseInt(view.getAttribute("data-scroll-x")) : 0;
                 var left = sumleft + x + view.clientWidth / 2 - Math.ceil(_this.current.clientWidth / 2);
+                if (left > 0) left = 0;
                 if (isCentered) {
-                    if (left > 0) left = 0;
                     if (view.getAttribute("data-scroll-maxLeft") == null) {
                         maxLeft = _this.hotbtn[_this.hotbtn.length - 1].getBoundingClientRect().right - view.getBoundingClientRect().right;
                         view.setAttribute("data-scroll-maxLeft", maxLeft)
