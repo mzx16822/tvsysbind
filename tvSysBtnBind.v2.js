@@ -166,7 +166,7 @@
                     if (_this.prev) _this.prev.classList.remove(_this.currentClass);
                     //_this.target=document.getElementById(_this.currentId);
                     _this.className = item;
-                    _this.prevIndex = _this.currentIndex = _this.historyFocus[_this.currentId+item] ? _this.historyFocus[_this.currentId+item] : index;
+                    _this.prevIndex = _this.currentIndex = typeof index!="undefined" ?index:  _this.historyFocus[_this.currentId+item];
                     _this.reLoad();
                 }
                 self.readFn = function() {
