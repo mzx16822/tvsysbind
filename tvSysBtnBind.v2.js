@@ -133,7 +133,7 @@
                 }
                 this.reSetClass = function(item, index, curClass) {
                     if (history) _this.historyFocus[_this.currentId+_this.className] = _this.currentIndex;
-                    index = index ? index : 0;
+                    //index = index ? index : 0;
                     _this.prevCurrentClass = _this.currentClass;
                     if (curClass) {
                         _this.currentClass = curClass
@@ -375,7 +375,7 @@
                         if (self.isNumber(objRules[index])) {
                             _this.currentIndex = parseInt(_this.currentIndex) + parseInt(objRules[index])
                         } else if (Array.isArray(objRules[index])) {
-                            _this.reSetClass(objRules[index][0], objRules[index][1])
+                            _this.reSetClass(objRules[index][0], objRules[index][1], objRules[index][2])
                         } else if (typeof obj["line"] != "undefined") {
                             _this.currentIndex = _this.currentIndex + line
                         }
@@ -429,7 +429,8 @@
                     _this.className = _this.className;
                     if (e.keyCode == 8 || e.keyCode == 27) {
                         if (rules[_this.className] && (typeof rules[_this.className]["onBack"]) == "function") rules[_this.className]["onBack"].call(_this);
-                        else _this.onBack.call(_this)
+                        else _this.onBack.call(_this);
+                        return
                     }
                     if (rules && rules[_this.className] && (typeof rules[_this.className]["onPress"]) == "function") init.rules[_this.className]["onPress"].call(_this);
                     else _this.onPress.call(_this);
