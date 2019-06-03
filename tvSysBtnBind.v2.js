@@ -165,6 +165,8 @@
                 self.newItem = function(item, index) {
                     if (_this.prev) _this.prev.classList.remove(_this.currentClass);
                     //_this.target=document.getElementById(_this.currentId);
+                    if(typeof _this.historyFocus[_this.currentId+item]=="undefined")
+                        _this.historyFocus[_this.currentId+item]=0;
                     _this.className = item;
                     _this.prevIndex = _this.currentIndex = typeof index!="undefined" ?index:  _this.historyFocus[_this.currentId+item];
                     _this.reLoad();
@@ -375,7 +377,7 @@
                         if (self.isNumber(objRules[index])) {
                             _this.currentIndex = parseInt(_this.currentIndex) + parseInt(objRules[index])
                         } else if (Array.isArray(objRules[index])) {
-                            _this.reSetClass(objRules[index][0], objRules[index][1], objRules[index][2])
+                            _this.reSetClass(objRules[index][0], objRules[index][1])
                         } else if (typeof obj["line"] != "undefined") {
                             _this.currentIndex = _this.currentIndex + line
                         }
@@ -429,8 +431,7 @@
                     _this.className = _this.className;
                     if (e.keyCode == 8 || e.keyCode == 27) {
                         if (rules[_this.className] && (typeof rules[_this.className]["onBack"]) == "function") rules[_this.className]["onBack"].call(_this);
-                        else _this.onBack.call(_this);
-                        return
+                        else _this.onBack.call(_this)
                     }
                     if (rules && rules[_this.className] && (typeof rules[_this.className]["onPress"]) == "function") init.rules[_this.className]["onPress"].call(_this);
                     else _this.onPress.call(_this);
