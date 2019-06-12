@@ -1,4 +1,4 @@
-    (function(arr) { 
+ (function(arr) { 
         //当前元素删除
         arr.forEach(function(item) {
             if (item.hasOwnProperty('remove')) {
@@ -97,7 +97,7 @@
                     btnEnter = init.btnEnter ? init.btnEnter : 13,
                     history = typeof init.history == "undefined" ? true : init.history,
                     isFloatLast = typeof init.isFloatLast == "undefined" ? false : init.isFloatLast,
-                    isCentered = typeof init.isCentered == "undefined" ? false : init.isCentered,
+                    isCentered = typeof init.isCentered == "undefined" ? true : init.isCentered,
                     currentClass = init.currentClass ? init.currentClass : "current",
                     effect = init.effect ? init.effect : "slide1",
                     element = new Array(),
@@ -131,8 +131,18 @@
                     _this.target.appendChild(focusobj);
                     init.onLoad.call(_this);
                 }
+                self.getCurRule=function(){
+                    var obj = {};
+                    if (rules) {
+                        obj = rules["#" + _this.currentId + ">." + _this.className];
+                        if (typeof obj == "undefined") obj = rules[_this.className]
+                    }
+                    return obj
+                }
                 this.reSetClass = function(item, index, curClass) {
-                    if (history) _this.historyFocus[_this.currentId+_this.className] = _this.currentIndex;
+                 var obj =_self.getCurRule();
+                    if(typeof obj["history"]=="undefined") obj["history"]=history; //默认历史记录开关
+                    if (obj["history"]) _this.historyFocus[_this.currentId+_this.className] = _this.currentIndex; //当前历史开关
                     //index = index ? index : 0;
                     _this.prevCurrentClass = _this.currentClass;
                     if (curClass) {
@@ -163,6 +173,7 @@
                     }
                 }
                 self.newItem = function(item, index) {
+
                     if (_this.prev) _this.prev.classList.remove(_this.currentClass);
                     //_this.target=document.getElementById(_this.currentId);
                     if(typeof _this.historyFocus[_this.currentId+item]=="undefined")
@@ -238,8 +249,9 @@
                     // var view = _this.current.parentNode.parentNode;
                     var sumleft = view.getAttribute("data-scroll-x") ? parseInt(view.getAttribute("data-scroll-x")) : 0;
                     var left = sumleft + x + view.clientWidth / 2 - Math.ceil(_this.current.clientWidth / 2);
-                    if (left > 0) left = 0;
-                    if (isCentered) {
+                    
+                      if (isCentered) {
+                        if (left > 0) left = 0;
                         if (view.getAttribute("data-scroll-maxLeft") == null) {
                             maxLeft = _this.hotbtn[_this.hotbtn.length - 1].getBoundingClientRect().right - view.getBoundingClientRect().right;
                             view.setAttribute("data-scroll-maxLeft", maxLeft)
@@ -363,8 +375,7 @@
                 self.ruleFn = function(index, direction) {
                     var obj = {};
                     if (rules) {
-                        obj = rules["#" + _this.currentId + ">." + _this.className];
-                        if (typeof obj == "undefined") obj = rules[_this.className]
+                        obj =_self.getCurRule();
                     }
                     if (obj && typeof obj == "object" && typeof obj["line"] != "undefined") {
                         var line = obj["line"]
