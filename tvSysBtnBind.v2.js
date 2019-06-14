@@ -297,7 +297,7 @@
                     view.children[0].style.position = "absolute";
                     var sumleft = view.getAttribute("data-scroll-x") ? parseInt(view.getAttribute("data-scroll-x")) : 0;
                     if (direction == "x") {
-                        _this.current.parentNode.style.width = _this.hotbtn.length * _this.current.clientWidth * 2 + "px";
+                        view.children[0].style.width = _this.hotbtn.length * _this.current.clientWidth * 2 + "px";
                         var scroll_left = view.getBoundingClientRect().left - _this.current.getBoundingClientRect().left;
                         _this.viewScrollX(scroll_left,view)
                     }
