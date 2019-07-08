@@ -399,7 +399,7 @@ function getBoundingClientRect(ele) {
                     
                       if (isCentered) {
                         if (left > 0) left = 0;
-                        if (obj["maxLeft"]==undefined) {
+                        if (obj["maxLeft"]==undefined||obj["maxLeft"]==null) {
                             maxLeft = getBoundingClientRect(_this.hotbtn[_this.hotbtn.length - 1]).right - getBoundingClientRect(view).right;
                             obj["maxLeft"]=maxLeft;
             
@@ -407,6 +407,8 @@ function getBoundingClientRect(ele) {
                         if (left < sumleft && left < -maxLeft) {
                             left = -maxLeft
                         }
+                        // if(maxLeft<view.clientWidth)
+                        //  left=0;
                     }
                     obj["directionX"]=left;
                     view.children[0].style.left = left + "px"
@@ -449,7 +451,8 @@ function getBoundingClientRect(ele) {
                     if (obj["direction"] == "x") {
                         view.children[0].style.width = _this.hotbtn.length * _this.current.clientWidth * 2 + "px";
                         var scroll_left = getBoundingClientRect(view).left - getBoundingClientRect(_this.current).left;
-                        _this.viewScrollX(scroll_left,view)
+                        if( _this.hotbtn.length * _this.current.clientWidth>view.clientWidth)
+                         _this.viewScrollX(scroll_left,view);
                     }
                     var sumleft = obj["directionY"] ? parseInt(obj["directionY"]) : 0;
                     if (obj["direction"] == "y") {
@@ -581,6 +584,10 @@ function getBoundingClientRect(ele) {
                     }
                     self.overIndex()
                 }
+                this.back=function(){
+                    e.keyCode=8;
+                   self.onPressdo();  
+                }
                 self.onPressdo = function(e) {
                     _this.event = e;
                     _this.currentIndex = _this.currentIndex >= element.length - 1 ? element.length - 1 : _this.currentIndex;
@@ -590,6 +597,7 @@ function getBoundingClientRect(ele) {
                     _this.current = element[_this.currentIndex];
                     _this.currentIndex = _this.currentIndex;
                     _this.className = _this.className;
+                    //$.tips(e.keyCode)
                     if (e.keyCode == 8 || e.keyCode == 27) {
                         if (rules[_this.className] && (typeof rules[_this.className]["onBack"]) == "function") rules[_this.className]["onBack"].call(_this);
                         else _this.onBack.call(_this)
