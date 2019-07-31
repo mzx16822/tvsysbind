@@ -439,6 +439,7 @@ function getBoundingClientRect(ele) {
                     }
 
                     var view = _this.current.parentNode.parentNode;
+                    if(obj["directionParent"])view=obj["directionParent"];
                     // var direction = view.getAttribute("data-scroll-direction");
                     // if (!direction) {
                     //     view = _this.current.parentNode.parentNode.parentNode;
