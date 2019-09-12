@@ -586,8 +586,8 @@ function getBoundingClientRect(ele) {
                     self.overIndex()
                 }
                 this.back=function(){
-                    e.keyCode=8;
-                   self.onPressdo();  
+                    _this.event.keyCode=8;
+                   self.onPressdo(_this.event);  
                 }
                 self.onPressdo = function(e) {
                     _this.event = e;
