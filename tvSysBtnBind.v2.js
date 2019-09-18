@@ -589,6 +589,29 @@ function getBoundingClientRect(ele) {
                     _this.event.keyCode=8;
                    self.onPressdo(_this.event);  
                 }
+                this.makepress=function(direction){
+                    switch(direction) {
+                         case "left":
+                             _this.event.keyCode=btnLeft;
+                            break;
+                         case "up":
+                            _this.event.keyCode=btnUp;
+                         break;
+                         case "right":
+                          _this.event.keyCode=btnRight;
+                            break;
+                            case "down":
+                             _this.event.keyCode=btnDown;
+                            break;
+                             case "enter":
+                             _this.event.keyCode=btnEnter;
+                            break;
+                             case "back":
+                             _this.event.keyCode=8;
+                            break;
+                    } 
+                   self.onPressdo(_this.event);  
+                }
                 self.onPressdo = function(e) {
                     _this.event = e;
                     _this.currentIndex = _this.currentIndex >= element.length - 1 ? element.length - 1 : _this.currentIndex;
